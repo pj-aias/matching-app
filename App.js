@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
-import Home from './screens/Home';
+import Match from './screens/Matching/Match';
 import Top from './screens/Auth/Top';
 import Signin from './screens/Auth/SignIn';
 import Signup from './screens/Auth/Signup';
@@ -47,6 +47,11 @@ const App = () => {
           <Stack.Screen
             name="Start"
             component={Start}
+            options={theme}
+          />
+          <Stack.Screen
+            name="Match"
+            component={Match}
             options={theme}
           />
           <Stack.Screen
