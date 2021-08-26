@@ -6,6 +6,7 @@ const Stack = createStackNavigator();
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './screens/Home';
 import Sub from './screens/Sub';
+import Top from './screens/Auth/Top';
 import Signin from './screens/Auth/SignIn';
 import Signup from './screens/Auth/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -17,11 +18,15 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Sign up"
+          name="TOP"
+            component={Top}
+          />
+          <Stack.Screen
+            name="Signup"
             component={Signup}
           />
           <Stack.Screen
-            name="Sign in"
+            name="Signin"
             component={Signin}
           />
         </Stack.Navigator>
