@@ -10,6 +10,7 @@ import Signin from './screens/Auth/SignIn';
 import Signup from './screens/Auth/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Chat from './screens/Chat';
+import Start from './screens/Matching/Start';
 
 const theme = {
   headerStyle: {
@@ -44,8 +45,8 @@ const App = () => {
             options={theme}
           />
           <Stack.Screen
-            name="Home"
-            component={Home}
+            name="Start"
+            component={Start}
             options={theme}
           />
           <Stack.Screen

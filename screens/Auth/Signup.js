@@ -3,16 +3,33 @@ import { View } from 'react-native';
 import { Formik } from 'formik';
 import authSchema from '../../util/yup.js'
 import { Button, Input } from 'react-native-elements';
+import axios from 'axios';
 
-const Signup = () => {
+const Signup = ({ navigation }) => {
 
   const handleSubmit = async (name, password) => {
     console.log(name, password);
-    try {
-
-    } catch (err) {
-
-    }
+    const result = await axios({
+      method: 'POST',
+      url: 'http://localhost:8080/user',
+      data: {
+        "name": name,
+        "password": password,
+        "signature": "test"
+      }
+    })
+    .then((res) => {
+      console.log(res);
+      return res.token;
+      // tokenを使用した処理
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Start' }],
+    });
   }
 
   return (

@@ -1,21 +1,20 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useEffect } from "react";
+import { SafeAreaView, View } from "react-native";
 import { Text, Button } from "react-native-elements";
-import { useNavigation } from '@react-navigation/native';
 
-const Top = ({navigation}) => {
+const Top = ({ navigation }) => {
 
   return (
-    <View>
+    <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <View flexDirection="row">
-      <Button title="サインイン" 
-        onPress={() => { navigation.navigate('Signin') }}
-      />
-      <Button title="サインアップ" 
-        onPress={() => { navigation.navigate('Signup') }}
-      />
+        <Button title="サインイン"
+          onPress={() => { navigation.navigate('Signin') }}
+        />
+        <Button title="サインアップ"
+          onPress={() => { navigation.navigate('Signup') }}
+        />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
