@@ -3,13 +3,13 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
-import { StyleSheet, Text, View } from 'react-native';
+
 import Home from './screens/Home';
-import Sub from './screens/Sub';
 import Top from './screens/Auth/Top';
 import Signin from './screens/Auth/SignIn';
 import Signup from './screens/Auth/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Chat from './screens/Chat';
 
 
 const App = () => {
@@ -35,8 +35,8 @@ const App = () => {
           component={Home}
         />
         <Stack.Screen
-          name="Sub"
-          component={Sub}
+          name="Chat"
+          component={Chat}
         />
       </NavigationContainer>
     </SafeAreaProvider>

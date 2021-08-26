@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Text, View } from 'react-native';
 
-const Home = ({ navigation }) => {
+const Matching = ({ navigation }) => {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
+    <View>
+      <Text>Matching</Text>
       <Button
         title="Go to Details"
         onPress={() => navigation.navigate('Details')}
@@ -13,4 +13,4 @@ const Home = ({ navigation }) => {
   );
 }
 
-export default Home;
+export default Matching;

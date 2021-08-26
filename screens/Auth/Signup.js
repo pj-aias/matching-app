@@ -5,6 +5,7 @@ import authSchema from '../../util/yup.js'
 import { Button, Input } from 'react-native-elements';
 
 const Signup = () => {
+
   const handleSubmit = async (name, password) => {
     console.log(name, password);
     try {
