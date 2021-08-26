@@ -11,6 +11,15 @@ import Signup from './screens/Auth/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Chat from './screens/Chat';
 
+const theme = {
+  headerStyle: {
+    backgroundColor: '#4FCDF5',
+  },
+  headerTintColor: '#fff',
+  headerTitleStyle: {
+    fontWeight: 'bold',
+  },
+};
 
 const App = () => {
   return (
@@ -18,26 +27,33 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-          name="TOP"
+            name="TOP"
             component={Top}
+            options={{
+              headerShown: false
+            }}
           />
           <Stack.Screen
             name="Signup"
             component={Signup}
+            options={theme}
           />
           <Stack.Screen
             name="Signin"
             component={Signin}
+            options={theme}
+          />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={theme}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={Chat}
+            options={theme}
           />
         </Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-        />
-        <Stack.Screen
-          name="Chat"
-          component={Chat}
-        />
       </NavigationContainer>
     </SafeAreaProvider>
   );
