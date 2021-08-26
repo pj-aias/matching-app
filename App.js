@@ -8,32 +8,34 @@ import Home from './screens/Home';
 import Sub from './screens/Sub';
 import Signin from './screens/Auth/SignIn';
 import Signup from './screens/Auth/Signup';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-class App extends React.Component {
-  render () {
-    return (
+
+const App = () => {
+  return (
+    <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Home"
-            component={Home}
-          />
-          <Stack.Screen
-            name="Sub"
-            component={Sub}
+            name="Sign up"
+            component={Signup}
           />
           <Stack.Screen
             name="Sign in"
             component={Signin}
           />
-          <Stack.Screen
-            name="Sign up"
-            component={Signup}
-          />
         </Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+        />
+        <Stack.Screen
+          name="Sub"
+          component={Sub}
+        />
       </NavigationContainer>
-    );
-  }
-}
+    </SafeAreaProvider>
+  );
+};
 
 export default App;
