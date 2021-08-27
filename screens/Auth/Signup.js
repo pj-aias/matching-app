@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Formik } from 'formik';
 import authSchema from '../../util/yup.js'
+import { sendAPIRequest } from '../../util/api.js'
 import { Button, Input } from 'react-native-elements';
 import axios from 'axios';
 
@@ -9,23 +10,23 @@ const Signup = ({ navigation }) => {
 
   const handleSubmit = async (name, password) => {
     console.log(name, password);
-    const result = await axios({
+
+    const result = await sendAPIRequest('user', {
       method: 'POST',
-      url: 'http://localhost:8080/user',
       data: {
         "name": name,
         "password": password,
         "signature": "test"
       }
     })
-    .then((res) => {
-      console.log(res);
-      return res.token;
-      // tokenを使用した処理
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((res) => {
+        console.log(res);
+        return res.token;
+        // tokenを使用した処理
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     navigation.reset({
       index: 0,
       routes: [{ name: 'Start' }],
