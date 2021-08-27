@@ -21,16 +21,16 @@ const Signup = ({ navigation }) => {
     })
       .then((res) => {
         console.log(res);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Start' }],
+        });
         return res.token;
         // tokenを使用した処理
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.message);
       });
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Start' }],
-    });
   }
 
   return (
