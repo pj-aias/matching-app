@@ -11,10 +11,10 @@ const Signup = ({ navigation }) => {
   const handleSubmit = async (name, password) => {
     console.log(name, password);
 
-    const result = await sendAPIRequest('user', {
+    const result = await sendAPIRequest('/user', {
       method: 'POST',
       data: {
-        "name": name,
+        "username": name,
         "password": password,
         "signature": "test"
       }
