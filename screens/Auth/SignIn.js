@@ -5,7 +5,7 @@ import authSchema from '../../util/yup.js'
 import { sendAPIRequest } from '../../util/api.js'
 import { Button, Input } from 'react-native-elements';
 
-const Signin = () => {
+const Signin = ({ navigation }) => {
   const handleSubmit = async (name, password) => {
     console.log(name, password);
 
