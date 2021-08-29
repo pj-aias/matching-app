@@ -4,6 +4,8 @@ import { sendAPIRequestAuth } from '../util/api';
 
 const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
+  // currently API server doesn't send users, so it will undefined
+  const [users, setUsers] = useState([]);
 
   const { roomId } = route.params;
 
@@ -14,6 +16,7 @@ const Chat = ({ route, navigation }) => {
       console.log('GET /message');
       console.log(res);
       setMessages(res.data.messages);
+      setUsers(res.data.chatroom.users);
     })
   }, [roomId]);
 
@@ -21,7 +24,7 @@ const Chat = ({ route, navigation }) => {
 
   return (
     <View>
-      <Text>Chat</Text>
+      <Text>ユーザ: {users.join(', ')}</Text>
       {messagesView}
       <Button title="Go to Details" onPress={() => { }} />
     </View>
