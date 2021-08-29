@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Button } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { sendAPIRequestAuth } from '../util/api';
 
 const ChatIndex = ({ navigation }) => {
@@ -26,18 +27,22 @@ const ChatIndex = ({ navigation }) => {
   const roomsView = rooms.map((r) => <Room room={r} openRoom={goToChat(r.id)} />);
 
   return (
-    <View>
+    <ScrollView>
       <Text>Chatrooms</Text>
       {roomsView}
-    </View>
+    </ScrollView>
   )
 }
 
 
 const Room = ({ room, openRoom }) => (
-  <View>
-    <Text>ユーザ: {room.users.join(', ')}</Text>
+  <View style={{
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+
+  }}>
     <Button title={"開く"} onPress={openRoom}></Button>
+    <Text>ユーザ: {room.users.join(', ')}</Text>
   </View>
 )
 
