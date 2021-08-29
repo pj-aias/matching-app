@@ -11,6 +11,7 @@ import Signup from './screens/Auth/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Chat from './screens/Chat';
 import Start from './screens/Matching/Start';
+import ChatIndex from './screens/ChatIndex';
 
 const theme = {
   headerStyle: {
@@ -57,6 +58,11 @@ const App = () => {
           <Stack.Screen
             name="Chat"
             component={Chat}
+            options={theme}
+          />
+          <Stack.Screen
+            name="ChatIndex"
+            component={ChatIndex}
             options={theme}
           />
         </Stack.Navigator>

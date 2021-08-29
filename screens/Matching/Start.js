@@ -19,6 +19,9 @@ const Start = ({ navigation }) => {
       .catch(showAxiosError);
   }
 
+  const goToChatIndex = () => {
+    navigation.navigate('ChatIndex');
+  }
 
   return (
     <View style={{
@@ -28,6 +31,11 @@ const Start = ({ navigation }) => {
       <Button
         title="さっそくはじめる！"
         onPress={handleSubmit}
+      />
+      <Text>または</Text>
+      <Button
+        title="過去のチャットを見る"
+        onPress={goToChatIndex}
       />
     </View>
   );
