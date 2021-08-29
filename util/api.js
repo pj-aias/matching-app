@@ -20,3 +20,21 @@ export const sendAPIRequestAuth = (endpoint, data) => axios({
 export const setAuthToken = (tokenString) => {
     authToken = tokenString;
 }
+
+export const showAxiosError = (error) => {
+    if (error.response) {
+        console.log("** error response **")
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+    }
+    if (error.request) {
+        console.log("** error request **")
+        console.log(error.request);
+    }
+
+    console.log('** error message **');
+    console.log(error.message);
+    console.log('** error config **');
+    console.log(error.config);
+}

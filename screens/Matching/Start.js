@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
-import { sendAPIRequestAuth } from '../../util/api.js'
+import { sendAPIRequestAuth, showAxiosError } from '../../util/api.js'
 
 const Start = ({ navigation }) => {
 
@@ -13,9 +13,7 @@ const Start = ({ navigation }) => {
         console.log(res);
         navigation.navigate('Match');
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
+      .catch(showAxiosError);
   }
 
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Formik } from 'formik';
 import authSchema from '../../util/yup.js'
-import { sendAPIRequest, setAuthToken } from '../../util/api.js'
+import { sendAPIRequest, setAuthToken, showAxiosError } from '../../util/api.js'
 import { Button, Input } from 'react-native-elements';
 
 const Signin = ({ navigation }) => {
@@ -25,10 +25,7 @@ const Signin = ({ navigation }) => {
         });
         setAuthToken(res.data.token);
       })
-      .catch((err) => {
-        console.log(err);
-        console.log(err.message);
-      });
+      .catch(showAxiosError);
   }
 
   return (
