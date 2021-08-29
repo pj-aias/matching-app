@@ -25,8 +25,7 @@ const Signup = ({ navigation }) => {
           index: 0,
           routes: [{ name: 'Start' }],
         });
-        return res.token;
-        // tokenを使用した処理
+        setAuthToken(res.data.token);
       })
       .catch((err) => {
         console.log(err.message);

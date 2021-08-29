@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Formik } from 'formik';
 import authSchema from '../../util/yup.js'
-import { sendAPIRequest } from '../../util/api.js'
+import { sendAPIRequest, setAuthToken } from '../../util/api.js'
 import { Button, Input } from 'react-native-elements';
 
 const Signin = ({ navigation }) => {
@@ -23,8 +23,7 @@ const Signin = ({ navigation }) => {
           index: 0,
           routes: [{ name: 'Start' }],
         });
-        return res.token;
-        // tokenを使用した処理
+        setAuthToken(res.data.token);
       })
       .catch((err) => {
         console.log(err.message);
