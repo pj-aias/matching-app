@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
-import { sendAPIRequest } from '../../util/api.js'
+import { sendAPIRequestAuth } from '../../util/api.js'
 
 const Start = ({ navigation }) => {
 
   const handleSubmit = async () => {
-    const result = await sendAPIRequest('/matching', {
+    const result = await sendAPIRequestAuth('/matching', {
       method: 'POST',
     })
       .then((res) => {
