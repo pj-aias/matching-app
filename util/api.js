@@ -13,7 +13,7 @@ export const sendAPIRequestAuth = (endpoint, data) => axios({
     url: 'http://' + apiHost + endpoint,
     headers: {
         ...data.headers,
-        "Authorizations": `Bearer ${authToken}`
+        "Authorization": `Bearer ${authToken}`
     }
 });
 
