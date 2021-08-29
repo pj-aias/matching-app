@@ -18,7 +18,6 @@ const Chat = ({ route, navigation }) => {
   }, [roomId]);
 
   const messagesView = messages.map((m) => <Message content={m.content} user={m.user} />)
-  console.log(messages)
 
   return (
     <View>
