@@ -2,16 +2,33 @@ import React from 'react';
 import { View } from 'react-native';
 import { Formik } from 'formik';
 import authSchema from '../../util/yup.js'
+import { sendAPIRequest } from '../../util/api.js'
 import { Button, Input } from 'react-native-elements';
 
-const Signin = () => {
+const Signin = ({ navigation }) => {
   const handleSubmit = async (name, password) => {
     console.log(name, password);
-    try {
 
-    } catch (err) {
-
-    }
+    const result = await sendAPIRequest('/login', {
+      method: 'POST',
+      data: {
+        "username": name,
+        "password": password,
+        "signature": "test"
+      }
+    })
+      .then((res) => {
+        console.log(res);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Start' }],
+        });
+        return res.token;
+        // tokenを使用した処理
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
   return (
@@ -54,10 +71,7 @@ const Signin = () => {
             <Button
               disabled={!(isValid && dirty)}
               onPress={handleSubmit}
-              title="はじめる" />
-            {/* <Text>
-              「はじめる」をタップすると、プライバシーポリシーと利用規約に承諾したことになります。
-            </Text> */}
+              title="ログインする" />
           </View>
         )}
       </Formik>
