@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Button } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { sendAPIRequestAuth } from '../util/api';
+import { sendAPIRequestAuth, showAxiosError } from '../util/api';
 
 const ChatIndex = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
@@ -13,7 +13,7 @@ const ChatIndex = ({ navigation }) => {
       console.log('get chat index');
       console.log(res);
       setRooms(res.data.chatrooms);
-    })
+    }).catch(showAxiosError);
   }, []);
 
   const goToChat = (roomId) => {

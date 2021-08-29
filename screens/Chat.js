@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Button } from 'react-native';
-import { sendAPIRequestAuth } from '../util/api';
+import { sendAPIRequestAuth, showAxiosError } from '../util/api';
 
 const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
@@ -17,7 +17,7 @@ const Chat = ({ route, navigation }) => {
       console.log(res);
       setMessages(res.data.messages);
       setUsers(res.data.chatroom.users);
-    })
+    }).catch(showAxiosError);
   }, [roomId]);
 
   const messagesView = messages.map((m) => <Message content={m.content} user={m.user} />)
