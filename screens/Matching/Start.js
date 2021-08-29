@@ -11,7 +11,10 @@ const Start = ({ navigation }) => {
     })
       .then((res) => {
         console.log(res);
-        navigation.navigate('Match');
+        navigation.navigate('Match', {
+          matchedUser: res.data.matched_user,
+          chatroomId: res.data.chatroom.id
+        });
       })
       .catch(showAxiosError);
   }
