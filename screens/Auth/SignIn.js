@@ -26,6 +26,7 @@ const Signin = ({ navigation }) => {
         setAuthToken(res.data.token);
       })
       .catch((err) => {
+        console.log(err);
         console.log(err.message);
       });
   }
