@@ -13,7 +13,7 @@ const ChatIndex = ({ navigation }) => {
       console.log(res);
       setRooms(res.data.chatrooms);
     })
-  }, [roomId]);
+  }, []);
 
   const goToChat = (roomId) => {
     return () => {
@@ -23,7 +23,7 @@ const ChatIndex = ({ navigation }) => {
     }
   };
 
-  const roomsView = rooms.map((r) => Room(r, goToChat(r.id)));
+  const roomsView = rooms.map((r) => <Room room={r} openRoom={goToChat(r.id)} />);
 
   return (
     <View>
@@ -34,11 +34,11 @@ const ChatIndex = ({ navigation }) => {
 }
 
 
-const Room = ({ room, openRoom }) => {
-  <div>
-    <Button onPress={openRoom}>開く</Button>
-    <Text>room.users</Text>
-  </div>
-}
+const Room = ({ room, openRoom }) => (
+  <View>
+    <Text>ユーザ: {room.users.join(', ')}</Text>
+    <Button title={"開く"} onPress={openRoom}></Button>
+  </View>
+)
 
 export default ChatIndex;
