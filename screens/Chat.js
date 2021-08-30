@@ -19,7 +19,8 @@ const Chat = ({ route, navigation }) => {
     })
       .then((res) => {
         console.log(res);
-        setMessages(messages.concat([res.data.message]))
+        setMessages(messages.concat([res.data.message]));
+        setText('');
       })
       .catch(showAxiosError);
   }
@@ -36,7 +37,7 @@ const Chat = ({ route, navigation }) => {
     }).catch(showAxiosError);
   }, [roomId]);
 
-  const messagesView = messages.map((m) => <Message key={m.id} content={m.content} user={m.user} />)
+  const messagesView = messages.map((m) => <Message key={m.id} content={m.content} user={m.user} />);
 
   return (
     <View style={{ display: 'flex', flex: 1 }}>
