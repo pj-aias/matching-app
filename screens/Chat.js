@@ -11,22 +11,7 @@ const Chat = ({ route, navigation }) => {
 
   const { roomId } = route.params;
 
-  const sendMessage = (content) => {
-    console.log(`send message "${content}"`)
-    sendAPIRequestAuth(`/message/${roomId}`, {
-      method: 'POSt',
-      data: { content }
-    })
-      .then((res) => {
-        console.log(res);
-        setMessages(messages.concat([res.data.message]));
-        setText('');
-      })
-      .catch(showAxiosError);
-  }
-
-  // Get messages from API after render (effect), and store them to variable if succeeded
-  useEffect(() => {
+  const syncMessages = () => {
     sendAPIRequestAuth('/message/' + roomId, {
       method: 'GET'
     }).then((res) => {
@@ -35,7 +20,24 @@ const Chat = ({ route, navigation }) => {
       setMessages(res.data.messages);
       setUsers(res.data.chatroom.users);
     }).catch(showAxiosError);
-  }, [roomId]);
+  }
+
+  const sendMessage = (content) => {
+    console.log(`send message "${content}"`)
+    sendAPIRequestAuth(`/message/${roomId}`, {
+      method: 'POSt',
+      data: { content }
+    })
+      .then((res) => {
+        console.log(res);
+        syncMessages();
+        setText('');
+      })
+      .catch(showAxiosError);
+  }
+
+  // Get messages from API after render (effect), and store them to variable if succeeded
+  useEffect(syncMessages, [roomId]);
 
   const messagesView = messages.map((m) => <Message key={m.id} content={m.content} user={m.user} />);
 
@@ -46,7 +48,7 @@ const Chat = ({ route, navigation }) => {
         {messagesView}
       </ScrollView>
       <Button title="送信する" onPress={() => sendMessage(text)} />
-      <AutoGrowTextInput onChangeText={setText} value={text} />
+      <AutoGrowTextInput onChangeText={setText} value={text} placeholder={"メッセージを入力してください"} />
     </View>
   );
 };
@@ -66,7 +68,7 @@ const AutoGrowTextInput = (props) => {
       onContentSizeChange={(event) => {
         setHeight(event.nativeEvent.contentSize.height)
       }}
-      style={{ height: textHeight, backgroundColor: 'gray' }}
+      style={{ height: textHeight }}
     />
   )
 }
