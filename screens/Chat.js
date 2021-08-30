@@ -3,6 +3,9 @@ import { Text, View, Button, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { sendAPIRequestAuth, showAxiosError } from '../util/api';
 
+// sync messages every 10 seconds
+const syncInterval = 10 * 1000;
+
 const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
   // Currently API server doesn't send users, so it will undefined
@@ -38,6 +41,12 @@ const Chat = ({ route, navigation }) => {
 
   // Get messages from API after render (effect), and store them to variable if succeeded
   useEffect(syncMessages, [roomId]);
+
+  // Sync messages periodicaly
+  useEffect(() => {
+    const timer = setInterval(syncMessages, syncInterval);
+    return () => clearInterval(timer);
+  }, [roomId]);
 
   const messagesView = messages.map((m) => <Message key={m.id} content={m.content} user={m.user} />);
 
