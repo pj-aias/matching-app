@@ -7,8 +7,22 @@ const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
   // Currently API server doesn't send users, so it will undefined
   const [users, setUsers] = useState([]);
+  const [text, setText] = useState('');
 
   const { roomId } = route.params;
+
+  const sendMessage = (content) => {
+    console.log(`send message "${content}"`)
+    sendAPIRequestAuth(`/message/${roomId}`, {
+      method: 'POSt',
+      data: { content }
+    })
+      .then((res) => {
+        console.log(res);
+        setMessages(messages.concat([res.data.message]))
+      })
+      .catch(showAxiosError);
+  }
 
   // Get messages from API after render (effect), and store them to variable if succeeded
   useEffect(() => {
@@ -30,8 +44,8 @@ const Chat = ({ route, navigation }) => {
       <ScrollView style={{ flex: 1 }}>
         {messagesView}
       </ScrollView>
-      <Button title="Go to Details" onPress={() => { }} />
-      <AutoGrowTextInput />
+      <Button title="送信する" onPress={() => sendMessage(text)} />
+      <AutoGrowTextInput onChangeText={setText} value={text} />
     </View>
   );
 };
@@ -40,9 +54,8 @@ const Message = ({ content, user }) => (
   <Text>{user.username}: {content}</Text>
 );
 
-const AutoGrowTextInput = ({ props }) => {
+const AutoGrowTextInput = (props) => {
   const [height, setHeight] = useState(0);
-  const [text, setText] = useState('');
 
   const textHeight = Math.min(35 * 5, Math.max(25, height));
   return (
@@ -52,8 +65,6 @@ const AutoGrowTextInput = ({ props }) => {
       onContentSizeChange={(event) => {
         setHeight(event.nativeEvent.contentSize.height)
       }}
-      onChangeText={setText}
-      value={text}
       style={{ height: textHeight, backgroundColor: 'gray' }}
     />
   )
