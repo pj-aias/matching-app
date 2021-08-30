@@ -8,3 +8,4 @@ name = "distributed_bbs_mobile"
 crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
+distributed-bbs = { git = "https://github.com/pj-aias/distributed-bbs" }
