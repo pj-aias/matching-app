@@ -24,7 +24,7 @@ const ChatIndex = ({ navigation }) => {
     }
   };
 
-  const roomsView = rooms.map((r) => <Room room={r} openRoom={goToChat(r.id)} />);
+  const roomsView = rooms.map((r) => <Room key={r.id} room={r} openRoom={goToChat(r.id)} />);
 
   return (
     <ScrollView>
@@ -39,7 +39,6 @@ const Room = ({ room, openRoom }) => (
   <View style={{
     flexDirection: 'row',
     flexWrap: 'wrap',
-
   }}>
     <Button title={"開く"} onPress={openRoom}></Button>
     <Text>ユーザ: {room.users.join(', ')}</Text>
