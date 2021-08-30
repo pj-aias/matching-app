@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Button, TextInput } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { sendAPIRequestAuth, showAxiosError } from '../util/api';
 
 const Chat = ({ route, navigation }) => {
@@ -21,12 +22,14 @@ const Chat = ({ route, navigation }) => {
     }).catch(showAxiosError);
   }, [roomId]);
 
-  const messagesView = messages.map((m) => <Message content={m.content} user={m.user} />)
+  const messagesView = messages.map((m) => <Message key={m.id} content={m.content} user={m.user} />)
 
   return (
-    <View>
+    <View style={{ display: 'flex', flex: 1 }}>
       <Text>ユーザ: {users.join(', ')}</Text>
-      {messagesView}
+      <ScrollView style={{ flex: 1 }}>
+        {messagesView}
+      </ScrollView>
       <Button title="Go to Details" onPress={() => { }} />
       <AutoGrowTextInput />
     </View>
