@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Button, TextInput } from 'react-native';
 import { sendAPIRequestAuth, showAxiosError } from '../util/api';
 
 const Chat = ({ route, navigation }) => {
@@ -28,6 +28,7 @@ const Chat = ({ route, navigation }) => {
       <Text>ユーザ: {users.join(', ')}</Text>
       {messagesView}
       <Button title="Go to Details" onPress={() => { }} />
+      <AutoGrowTextInput />
     </View>
   );
 };
@@ -35,5 +36,24 @@ const Chat = ({ route, navigation }) => {
 const Message = ({ content, user }) => (
   <Text>{user.username}: {content}</Text>
 );
+
+const AutoGrowTextInput = ({ props }) => {
+  const [height, setHeight] = useState(0);
+  const [text, setText] = useState('');
+
+  const textHeight = Math.min(35 * 5, Math.max(25, height));
+  return (
+    <TextInput
+      {...props}
+      multiline={true}
+      onContentSizeChange={(event) => {
+        setHeight(event.nativeEvent.contentSize.height)
+      }}
+      onChangeText={setText}
+      value={text}
+      style={{ height: textHeight, backgroundColor: 'gray' }}
+    />
+  )
+}
 
 export default Chat;
