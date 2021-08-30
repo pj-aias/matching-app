@@ -6,6 +6,7 @@ import { sendAPIRequestAuth, showAxiosError } from '../util/api';
 const ChatIndex = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
 
+  // Get messages from API after render (effect), and store them to variable if succeeded
   useEffect(() => {
     sendAPIRequestAuth('/message/rooms', {
       method: 'GET'
@@ -16,6 +17,7 @@ const ChatIndex = ({ navigation }) => {
     }).catch(showAxiosError);
   }, []);
 
+  // Returns callback function to open a given chat
   const goToChat = (roomId) => {
     return () => {
       navigation.navigate('Chat', {

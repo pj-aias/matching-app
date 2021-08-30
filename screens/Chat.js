@@ -4,11 +4,12 @@ import { sendAPIRequestAuth, showAxiosError } from '../util/api';
 
 const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
-  // currently API server doesn't send users, so it will undefined
+  // Currently API server doesn't send users, so it will undefined
   const [users, setUsers] = useState([]);
 
   const { roomId } = route.params;
 
+  // Get messages from API after render (effect), and store them to variable if succeeded
   useEffect(() => {
     sendAPIRequestAuth('/message/' + roomId, {
       method: 'GET'
