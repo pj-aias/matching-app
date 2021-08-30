@@ -1,4 +1,4 @@
-NAME = libbbs_signature
+NAME = libdistributed_bbs_modile
 LIB = $(NAME).a
 SO = $(NAME).so
 ARCHS_IOS = armv7-apple-ios armv7s-apple-ios aarch64-apple-ios

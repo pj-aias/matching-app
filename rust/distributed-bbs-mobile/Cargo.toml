@@ -1,0 +1,10 @@
+[package]
+name = "distributed-bbs-mobile"
+version = "0.1.0"
+edition = "2018"
+
+[lib]
+name = "distributed_bbs_mobile"
+crate-type = ["staticlib", "cdylib"]
+
+[dependencies]
