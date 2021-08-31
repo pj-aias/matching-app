@@ -1,6 +1,8 @@
 use std::borrow::Borrow;
 use libc::size_t;
 
+use super::{mobile_sign, mobile_verify};
+
 #[repr(C)]
 pub struct StringPtr {
     pub ptr: *const u8,
@@ -28,10 +30,12 @@ impl Borrow<str> for StringPtr {
 
 #[allow(unused)]
 extern "C" fn rust_bbs_sign(msg: StringPtr, cred: StringPtr, gpk: StringPtr, seed: StringPtr) -> StringPtr {
-    "".into()
+    let signature: &str = &mobile_sign(msg.borrow(), cred.borrow(), gpk.borrow(), seed.borrow());
+    signature.into()
 }
 
 #[allow(unused)]
-extern "C" fn rust_bbs_verify(msg: StringPtr, signature: StringPtr, gpk: StringPtr) -> StringPtr {
-    "".into()
+extern "C" fn rust_bbs_verify(msg: StringPtr, signature: StringPtr, gpk: StringPtr) -> i32 {
+    let result = mobile_verify(msg.borrow(), signature.borrow(), gpk.borrow());
+    result as i32
 }
