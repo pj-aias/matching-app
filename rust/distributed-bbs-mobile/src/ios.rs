@@ -24,3 +24,9 @@ impl StringPtr {
         }
     }
 }
+
+extern "C" fn rust_bbs_sign(msg: StringPtr, cred: StringPtr, gpk: StringPtr, seed: StringPtr) -> {
+}
+
+extern "C" fn rust_bbs_verify(msg: StringPtr, signature: StringPtr, gpk: StringPtr) -> {
+}
