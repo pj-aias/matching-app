@@ -95,7 +95,6 @@ mod test {
         };
 
         let msg = "hoge";
-        let msg2 = "piyo";
 
         let usk = CombinedUSK::new(&partials);
         let gpk: &str = &encode(&gpk);
