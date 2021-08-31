@@ -27,27 +27,27 @@ fn decode<'a, T: DeserializeOwned>(point: &String) -> T {
 }
 
 pub fn mobile_sign(
-    msg: &String,
-    cred: &String,
-    gpk: &String,
-    seed: &String,
+    msg: &str,
+    cred: &str,
+    gpk: &str,
+    seed: &str,
 ) -> std::string::String {
     let seed = base64::decode(seed).expect("base64 decode error");
     let seed = array_ref!(seed, 0, 32);
 
     let mut rng = StdRng::from_seed(*seed);
 
-    let cred: CombinedUSK = decode(cred);
-    let gpk: CombinedGPK = decode(gpk);
+    let cred: CombinedUSK = decode(&cred.to_string());
+    let gpk: CombinedGPK = decode(&gpk.to_string());
 
     let signature = sign(msg.as_bytes(), &cred, &gpk, &mut rng);
 
     encode(&signature)
 }
 
-pub fn mobile_verify(msg: &String, signature: &String, gpk: &String) -> bool {
-    let signature: Signature = decode(signature);
-    let gpk: CombinedGPK = decode(gpk);
+pub fn mobile_verify(msg: &str, signature: &str, gpk: &str) -> bool {
+    let signature: Signature = decode(&signature.to_string());
+    let gpk: CombinedGPK = decode(&gpk.to_string());
 
     verify(msg.as_bytes(), &signature, &gpk).is_ok()
 }
