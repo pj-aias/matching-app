@@ -28,7 +28,23 @@ impl Borrow<str> for StringPtr {
     }
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn rust_string_ptr(s: *mut String) -> *mut StringPtr {
+    Box::into_raw(Box::new(StringPtr::from(&**s)))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn rust_string_destroy(s: *mut String) {
+    let _ = Box::from_raw(s);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn rust_string_ptr_destroy(s: *mut StringPtr) {
+    let _ = Box::from_raw(s);
+}
+
 #[allow(unused)]
+#[no_mangle]
 extern "C" fn rust_bbs_sign(
     msg: StringPtr,
     cred: StringPtr,
@@ -40,6 +56,7 @@ extern "C" fn rust_bbs_sign(
 }
 
 #[allow(unused)]
+#[no_mangle]
 extern "C" fn rust_bbs_verify(msg: StringPtr, signature: StringPtr, gpk: StringPtr) -> i32 {
     let result = mobile_verify(msg.borrow(), signature.borrow(), gpk.borrow());
     result as i32
