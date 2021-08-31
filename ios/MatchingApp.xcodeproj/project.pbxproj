@@ -14,6 +14,8 @@
 		5D8C8FABC282462304DE12F2 /* libPods-MatchingApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6E1A78FEEB442A0A78CFDAF /* libPods-MatchingApp.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		BC1B029AF86BA091B2D32DFF /* libPods-MatchingApp-MatchingAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C07EEA78FC254710094A9BF /* libPods-MatchingApp-MatchingAppTests.a */; };
+		D1A7597E26DE29CD00DAF984 /* DistributedBbs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A7597D26DE29CD00DAF984 /* DistributedBbs.swift */; };
+		D1A7598026DE2A8200DAF984 /* DistributedBbs.m in Sources */ = {isa = PBXBuildFile; fileRef = D1A7597F26DE2A8200DAF984 /* DistributedBbs.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +45,9 @@
 		9C07EEA78FC254710094A9BF /* libPods-MatchingApp-MatchingAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MatchingApp-MatchingAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A68389AA5617F7B33C808B94 /* Pods-MatchingApp-MatchingAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MatchingApp-MatchingAppTests.debug.xcconfig"; path = "Target Support Files/Pods-MatchingApp-MatchingAppTests/Pods-MatchingApp-MatchingAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A6E1A78FEEB442A0A78CFDAF /* libPods-MatchingApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MatchingApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1A7597C26DE29CC00DAF984 /* MatchingApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MatchingApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		D1A7597D26DE29CD00DAF984 /* DistributedBbs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistributedBbs.swift; sourceTree = "<group>"; };
+		D1A7597F26DE2A8200DAF984 /* DistributedBbs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DistributedBbs.m; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -92,6 +97,9 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				D1A7597D26DE29CD00DAF984 /* DistributedBbs.swift */,
+				D1A7597F26DE2A8200DAF984 /* DistributedBbs.m */,
+				D1A7597C26DE29CC00DAF984 /* MatchingApp-Bridging-Header.h */,
 			);
 			name = MatchingApp;
 			sourceTree = "<group>";
@@ -145,7 +153,6 @@
 				A68389AA5617F7B33C808B94 /* Pods-MatchingApp-MatchingAppTests.debug.xcconfig */,
 				3E85CC9E6352C628C19F0750 /* Pods-MatchingApp-MatchingAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -208,7 +215,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1250;
 					};
 				};
 			};
@@ -412,7 +419,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				D1A7598026DE2A8200DAF984 /* DistributedBbs.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				D1A7597E26DE29CD00DAF984 /* DistributedBbs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +440,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A68389AA5617F7B33C808B94 /* Pods-MatchingApp-MatchingAppTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -458,6 +468,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3E85CC9E6352C628C19F0750 /* Pods-MatchingApp-MatchingAppTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = MatchingAppTests/Info.plist;
@@ -498,6 +509,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = MatchingApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "MatchingApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -523,6 +535,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = MatchingApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "MatchingApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
