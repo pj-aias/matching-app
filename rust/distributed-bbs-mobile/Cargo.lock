@@ -95,6 +95,7 @@ dependencies = [
  "base64",
  "bls12_381",
  "distributed-bss",
+ "libc",
  "rand",
  "rmp-serde",
  "serde",

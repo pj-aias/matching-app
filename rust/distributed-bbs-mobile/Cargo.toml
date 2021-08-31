@@ -14,6 +14,7 @@ rmp-serde = "0.15.5"
 base64 = "0.13.0"
 rand = "0.8.4"
 arrayref = "0.3.6"
+libc = "0.2.101"
 
 [dependencies.distributed-bss]
 git="https://github.com/pj-aias/distributed-bbs"

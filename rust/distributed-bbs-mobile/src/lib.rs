@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate arrayref;
 
+pub mod ios;
+
 use distributed_bss::sign;
 use distributed_bss::verify;
 use distributed_bss::CombinedGPK;
