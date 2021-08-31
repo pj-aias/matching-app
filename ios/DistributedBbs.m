@@ -6,9 +6,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import"React/RCTBridgeModule.h"
 
-@interface RCT_EXTERN_MODULE(Counter, NSObject)
+
+@interface RCT_EXTERN_MODULE(DistributedBBS, NSObject)
   RCT_EXTERN_METHOD(
-    ()
+                    sign: (String)message
+                    credential: (String)credential
+                    gpk: (String)gpk
+                    seed: (String)seed
                     )
 @end
