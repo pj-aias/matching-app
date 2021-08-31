@@ -1,7 +1,6 @@
 use std::borrow::Borrow;
 use libc::size_t;
 
-// Helper struct that we'll use to give strings to C.
 #[repr(C)]
 pub struct StringPtr {
     pub ptr: *const u8,
@@ -27,19 +26,12 @@ impl Borrow<str> for StringPtr {
     }
 }
 
-impl StringPtr {
-    pub fn as_str(&self) -> &str {
-        use std::{slice, str};
-
-        unsafe {
-            let slice = slice::from_raw_parts(self.ptr, self.len);
-            str::from_utf8(slice).unwrap()
-        }
-    }
-}
-
+#[allow(unused)]
 extern "C" fn rust_bbs_sign(msg: StringPtr, cred: StringPtr, gpk: StringPtr, seed: StringPtr) -> StringPtr {
+    "".into()
 }
 
+#[allow(unused)]
 extern "C" fn rust_bbs_verify(msg: StringPtr, signature: StringPtr, gpk: StringPtr) -> StringPtr {
+    "".into()
 }
