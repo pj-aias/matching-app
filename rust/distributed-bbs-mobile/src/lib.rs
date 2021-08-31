@@ -9,7 +9,7 @@ use distributed_bss::Signature;
 use rand::rngs::StdRng;
 use rand::SeedableRng;
 use serde::de::DeserializeOwned;
-use serde::{Deserialize, Serialize};
+use serde::{Serialize};
 
 pub fn encode<T>(point: &T) -> String
 where
@@ -102,6 +102,8 @@ fn test() {
 
 #[test]
 fn test_encode_and_decode() {
+    use serde::Deserialize;
+
     #[derive(Clone, Serialize, Deserialize)]
     struct Hoge {
         pub piyo: String,
