@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, Button } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { sendAPIRequestAuth, showAxiosError } from '../util/api';
+import { getUserNames } from './Chat.js'
 
 const ChatIndex = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
@@ -37,14 +38,18 @@ const ChatIndex = ({ navigation }) => {
 }
 
 
-const Room = ({ room, openRoom }) => (
-  <View style={{
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  }}>
-    <Button title={"開く"} onPress={openRoom}></Button>
-    <Text>ユーザ: {room.users.join(', ')}</Text>
-  </View>
-)
+const Room = ({ room, openRoom }) => {
+  const usernames = getUserNames(room);
+
+  return (
+    <View style={{
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    }}>
+      <Button title={"開く"} onPress={openRoom} style={{ margin_left: 5 }}></Button>
+      <Text>{usernames}</Text>
+    </View >
+  )
+}
 
 export default ChatIndex;
