@@ -3,7 +3,11 @@ import { Text, View, Button, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { sendAPIRequestAuth, showAxiosError } from '../util/api';
 
-export const getUserNames = (chatroom) => chatroom.users.map((u) => u.username).join(', ');
+export const getUserNames = (chatroom) => (
+  chatroom.users
+    ? chatroom.users.map((u) => u.username).join(', ')
+    : ''
+);
 
 // sync messages every 10 seconds
 const syncInterval = 10 * 1000;
@@ -11,7 +15,7 @@ const syncInterval = 10 * 1000;
 const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
   // Currently API server doesn't send users, so it will undefined
-  const [users, setUsers] = useState([]);
+  const [room, setRoom] = useState({});
   const [text, setText] = useState('');
 
   const { roomId } = route.params;
@@ -22,8 +26,9 @@ const Chat = ({ route, navigation }) => {
     }).then((res) => {
       console.log('GET /message');
       console.log(res);
+      console.log(res.data);
       setMessages(res.data.messages);
-      setUsers(res.data.chatroom.users);
+      setRoom(res.data.chatroom);
     }).catch(showAxiosError);
   }
 
@@ -51,10 +56,11 @@ const Chat = ({ route, navigation }) => {
   }, [roomId]);
 
   const messagesView = messages.map((m) => <Message key={m.id} content={m.content} user={m.user} />);
+  const usernames = getUserNames(room);
 
   return (
     <View style={{ display: 'flex', flex: 1 }}>
-      <Text>ユーザ: {users.join(', ')}</Text>
+      <Text>ユーザ: {usernames}</Text>
       <ScrollView style={{ flex: 1 }}>
         {messagesView}
       </ScrollView>
