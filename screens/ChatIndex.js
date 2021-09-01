@@ -37,14 +37,18 @@ const ChatIndex = ({ navigation }) => {
 }
 
 
-const Room = ({ room, openRoom }) => (
-  <View style={{
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  }}>
-    <Button title={"開く"} onPress={openRoom}></Button>
-    <Text>ユーザ: {room.users.join(', ')}</Text>
-  </View>
-)
+const Room = ({ room, openRoom }) => {
+  const usernames = room.users.map((u) => u.username).join(', ');
+
+  return (
+    <View style={{
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    }}>
+      <Button title={"開く"} onPress={openRoom} style={{ margin_left: 5 }}></Button>
+      <Text>{usernames}</Text>
+    </View >
+  )
+}
 
 export default ChatIndex;
