@@ -3,6 +3,8 @@ import { Text, View, Button, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { sendAPIRequestAuth, showAxiosError } from '../util/api';
 
+export const getUserNames = (chatroom) => chatroom.users.map((u) => u.username).join(', ');
+
 // sync messages every 10 seconds
 const syncInterval = 10 * 1000;
 
