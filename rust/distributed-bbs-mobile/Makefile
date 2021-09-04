@@ -1,4 +1,4 @@
-NAME = libdistributed_bbs_modile
+NAME = libdistributed_bbs_mobile
 LIB = $(NAME).a
 SO = $(NAME).so
 ARCHS_IOS = aarch64-apple-ios
