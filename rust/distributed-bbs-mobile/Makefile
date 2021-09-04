@@ -1,7 +1,7 @@
 NAME = libdistributed_bbs_modile
 LIB = $(NAME).a
 SO = $(NAME).so
-ARCHS_IOS = armv7-apple-ios armv7s-apple-ios aarch64-apple-ios
+ARCHS_IOS = aarch64-apple-ios
 ARCHS_ANDROID = aarch64-linux-android armv7-linux-androideabi arm-linux-androideabi i686-linux-android x86_64-linux-android
 NDK_STANDALONE = $(PWD)/../NDK
 ANDROID_DEST = ../android/app/src/main/jniLibs
