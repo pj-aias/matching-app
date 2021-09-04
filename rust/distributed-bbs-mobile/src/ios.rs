@@ -4,6 +4,7 @@ use std::borrow::Borrow;
 use super::{mobile_sign, mobile_verify};
 
 #[repr(C)]
+#[derive(Copy, Clone)]
 pub struct StringPtr {
     pub ptr: *const u8,
     pub len: size_t,
