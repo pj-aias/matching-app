@@ -1,21 +1,25 @@
 import axios from 'axios';
 
-const apiHost = '192.168.64.1:8080'
+const apiScheme = 'http;//';
+const apiHost = '203.178.139.171';
+const apiPort = 8080;
 let authToken = '';
+
+const generateApiUrl = (scheme, host, port, path) => `${apiScheme}://${apiHost}:${apiPort}${path}`;
 
 export const sendAPIRequest = (endpoint, data) => axios({
     ...data,
-    url: 'http://' + apiHost + endpoint,
+    url: generateApiUrl(apiScheme, apiHost, apiPort, endpoint)
 });
 
-export const sendAPIRequestAuth = (endpoint, data) => axios({
-    ...data,
-    url: 'http://' + apiHost + endpoint,
-    headers: {
-        ...data.headers,
-        "Authorization": `Bearer ${authToken}`
-    }
-});
+export const sendAPIRequestAuth = (endpoint, data) => {
+    let authData = {
+        ...data
+    };
+    authData.headers['Authorization'] = `Bearer ${authToken}`;
+
+    return sendAPIRequest(endpoint, authData);
+}
 
 export const setAuthToken = (tokenString) => {
     authToken = tokenString;
