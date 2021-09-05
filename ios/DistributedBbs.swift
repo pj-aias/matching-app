@@ -12,7 +12,7 @@ class DistributedBBS: NSObject {
 
   @objc
   func sign(_ moessage: String, _ credential: String, _ gpk: String, _ seed: String) -> String {
-    return ""
+    return "hello react native"
   }
   
   @objc
