@@ -18,4 +18,3 @@
                     )
 @end
 
-RCT_EXPORT_MODULE(CalendarModuleFoo);
