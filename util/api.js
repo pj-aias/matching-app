@@ -9,7 +9,7 @@ const generateApiUrl = (path) => `${apiScheme}://${API_HOST}:${API_PORT}${path}`
 
 export const sendAPIRequest = (endpoint, data) => axios({
     ...data,
-    url: generateApiUrl(apiScheme, apiHost, apiPort, endpoint)
+    url: generateApiUrl(apiScheme, endpoint)
 });
 
 export const sendAPIRequestAuth = (endpoint, data) => {
