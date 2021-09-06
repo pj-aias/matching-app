@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const apiScheme = 'http;//';
-const apiHost = '203.178.139.171';
-const apiPort = 8080;
+import { API_HOST, API_PORT } from '@env';
+
+const apiScheme = 'http';
 let authToken = '';
 
-const generateApiUrl = (scheme, host, port, path) => `${apiScheme}://${apiHost}:${apiPort}${path}`;
+const generateApiUrl = (path) => `${apiScheme}://${API_HOST}:${API_PORT}${path}`;
 
 export const sendAPIRequest = (endpoint, data) => axios({
     ...data,
