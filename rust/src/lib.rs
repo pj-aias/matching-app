@@ -1,7 +1,11 @@
 #[macro_use]
 extern crate arrayref;
 
+#[cfg(feature = "ios")]
 pub mod ios;
+
+#[cfg(feature = "android")]
+pub mod android;
 
 use distributed_bss::sign;
 use distributed_bss::verify;
@@ -11,7 +15,7 @@ use distributed_bss::Signature;
 use rand::rngs::StdRng;
 use rand::SeedableRng;
 use serde::de::DeserializeOwned;
-use serde::{Serialize};
+use serde::Serialize;
 
 pub fn encode<T>(point: &T) -> String
 where
@@ -26,12 +30,7 @@ fn decode<'a, T: DeserializeOwned>(point: &String) -> T {
     rmp_serde::from_read(&*point).expect("rmp decode error")
 }
 
-pub fn mobile_sign(
-    msg: &str,
-    cred: &str,
-    gpk: &str,
-    seed: &str,
-) -> std::string::String {
+pub fn mobile_sign(msg: &str, cred: &str, gpk: &str, seed: &str) -> std::string::String {
     let seed = base64::decode(seed).expect("base64 decode error");
     let seed = array_ref!(seed, 0, 32);
 
@@ -110,13 +109,4 @@ fn test_encode_and_decode() {
     struct Hoge {
         pub piyo: String,
     }
-
-    let fuga = Hoge {
-        piyo: "hogera".to_string(),
-    };
-
-    let encoded = encode(&fuga);
-    let decoded: Hoge = decode(&encoded);
-
-    assert_eq!(fuga.piyo, decoded.piyo);
 }
