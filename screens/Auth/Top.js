@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { SafeAreaView, View } from "react-native";
-import { Text, Button } from "react-native-elements";
+import { ReactNative, Text, Button } from "react-native-elements";
+const { DistributedBbs } = ReactNative.NativeModules;
 
 const Top = ({ navigation }) => {
 
@@ -13,6 +14,7 @@ const Top = ({ navigation }) => {
         <Button title="サインアップ"
           onPress={() => { navigation.navigate('Signup') }}
         />
+        <Text>number from rust: {DistributedBbs.rust_number()}</Text>
       </View>
     </SafeAreaView>
   );
