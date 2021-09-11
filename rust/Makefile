@@ -5,12 +5,16 @@ SOURCES=$(sort $(wildcard ./src/*.rs ./src/**/*.rs))
 OS_NAME=$(shell uname | tr '[:upper:]' '[:lower:]')
 PATH := $(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86_64/bin:$(PATH)
 
+BINDINGS_HEADER=target/bindings.h
+
 ANDROID_NDK_HOME=~/Library/Android/sdk/ndk/22.1.7171670
 
 ANDROID_AARCH64_LINKER=$(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86_64/bin/aarch64-linux-android29-clang
 ANDROID_ARMV7_LINKER=$(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86_64/bin/armv7a-linux-androideabi29-clang
 ANDROID_I686_LINKER=$(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86_64/bin/i686-linux-android29-clang
 ANDROID_X86_64_LINKER=$(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86_64/bin/x86_64-linux-android29-clang
+
+IOS_MODULE_HEADER=../ios/Classes/DistributedBbsModule.h
 
 SHELL := /bin/bash
 
@@ -45,7 +49,8 @@ init:
 # ##############################################################################
 
 ## ios: Compile the iOS universal library
-ios: target/universal/release/libdistributed_bbs.a
+ios: target/universal/release/libdistributed_bbs.a $(IOS_MODULE_HEADER)
+	@echo "[DONE] $@"
 
 target/universal/release/libdistributed_bbs.a: $(SOURCES)
 	@if [ $$(uname) == "Darwin" ] ; then \
@@ -54,8 +59,12 @@ target/universal/release/libdistributed_bbs.a: $(SOURCES)
 	fi
 	@echo "[DONE] $@"
 
+$(IOS_MODULE_HEADER): $(IOS_MODULE_HEADER).template $(BINDINGS_HEADER)
+	cat $(IOS_MODULE_HEADER).template $(BINDINGS_HEADER) > $@
+
 ## android: Compile the android targets (arm64, armv7 and i686)
 android: target/aarch64-linux-android/release/libdistributed_bbs.so target/armv7-linux-androideabi/release/libdistributed_bbs.so target/i686-linux-android/release/libdistributed_bbs.so target/x86_64-linux-android/release/libdistributed_bbs.so
+	@echo "[DONE] $@"
 
 target/aarch64-linux-android/release/libdistributed_bbs.so: $(SOURCES) ndk-home
 	CC_aarch64_linux_android=$(ANDROID_AARCH64_LINKER) \
@@ -91,7 +100,7 @@ ndk-home:
 ## bindings: Generate the .h file for iOS
 bindings: target/bindings.h
 
-target/bindings.h: $(SOURCES)
+$(BINDINGS_HEADER): $(SOURCES)
 	cbindgen $^ -c cbindgen.toml | grep -v \#include | uniq > $@
 	@echo "[DONE] $@"
 
