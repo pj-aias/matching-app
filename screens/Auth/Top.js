@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { SafeAreaView, View } from "react-native";
-import { ReactNative, Text, Button } from "react-native-elements";
-const { DistributedBbs } = ReactNative.NativeModules;
+import { NativeModules, Text, Button } from "react-native-elements";
+
+const { DistributedBbs } = NativeModules;
 
 const Top = ({ navigation }) => {
+  console.log('module: ', DistributedBbs)
 
   return (
     <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
