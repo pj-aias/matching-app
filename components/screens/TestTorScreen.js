@@ -2,17 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import Tor from 'react-native-tor';
 
+import { setupTor } from '../../util/api';
+
 export const TestTorScreen = (navigation) => {
   const tor = Tor();
   const [ip, setIp] = useState("")
 
   useEffect(() => {
-    console.log("connecting tor...");
-    tor.startIfNotStarted().then((p) => {
-      console.log(`running tor on port :${p}`);
-    }).catch((err) => {
-      console.error(err);
-    });
+    setupTor();
     try {
       tor.get('https://api.ipify.org/?format=json').then(resp => {
         console.log(resp);

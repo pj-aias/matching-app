@@ -1,11 +1,15 @@
 import axios from 'axios';
+import Tor from 'react-native-tor';
 
 const apiScheme = 'http';
 const apiHost = '192.168.64.1';
-const apiPort = 8080;
+const apiPort = 80;
+
+const tor = Tor();
+
 let authToken = '';
 
-const buildApiUrl = (path) => `${apiScheme}://${apiHost}:${apiPort}${path}`;
+const buildApiUrl = (path, host) => `${apiScheme}://${host || apiHost}:${apiPort}${path}`;
 const addAuthorizationHeader = (data) => ({
     ...data,
     headers: {
@@ -13,6 +17,20 @@ const addAuthorizationHeader = (data) => ({
         "Authorization": `Bearer ${authToken}`
     }
 });
+
+export const sendRequest = (method, url, headers, body) => {
+    switch (method) {
+        case 'GET':
+            tor.get(url, headers);
+            break;
+        case 'POST':
+            tor.post(url, body, headers);
+            break;
+        case 'DELETE':
+            tor.patch(url, body, headers);
+            break;
+    }
+}
 
 export const sendAPIRequest = (endpoint, data) => axios({
     ...data,
@@ -41,4 +59,13 @@ export const showAxiosError = (error) => {
     console.log(error.message);
     console.log('** error config **');
     console.log(error.config);
+}
+
+export const setupTor = () => {
+    console.log("connecting tor...");
+    tor.startIfNotStarted().then((p) => {
+        console.log(`running tor on port :${p}`);
+    }).catch((err) => {
+        console.error(err);
+    });
 }
