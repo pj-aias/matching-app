@@ -4,14 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
-import Match from './screens/Matching/Match';
-import Top from './screens/Auth/Top';
-import Signin from './screens/Auth/SignIn';
-import Signup from './screens/Auth/Signup';
+import Match from './components/screens/Matching/Match';
+import Top from './components/screens/Auth/Top';
+import Signin from './components/screens/Auth/SignIn';
+import Signup from './components/screens/Auth/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Chat from './screens/Chat';
-import Start from './screens/Matching/Start';
-import ChatIndex from './screens/ChatIndex';
+import Chat from './components/screens/Chat';
+import Start from './components/screens/Matching/Start';
+import ChatIndex from './components/screens/ChatIndex';
+import TestTorScreen from './components/screens/TestTorScreen';
 
 const theme = {
   headerStyle: {
@@ -28,6 +29,13 @@ const App = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="TestTor"
+            component={TestTorScreen}
+            options={{
+              headerShown: false
+            }}
+          />
           <Stack.Screen
             name="TOP"
             component={Top}
