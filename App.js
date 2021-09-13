@@ -12,6 +12,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Chat from './components/screens/Chat';
 import Start from './components/screens/Matching/Start';
 import ChatIndex from './components/screens/ChatIndex';
+import TestTorScreen from './components/screens/TestTorScreen';
 
 const theme = {
   headerStyle: {
@@ -28,6 +29,13 @@ const App = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="TestTor"
+            component={TestTorScreen}
+            options={{
+              headerShown: false
+            }}
+          />
           <Stack.Screen
             name="TOP"
             component={Top}
