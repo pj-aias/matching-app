@@ -5,9 +5,16 @@ import Tor from 'react-native-tor';
 export const TestTorScreen = (navigation) => {
   const tor = Tor();
   const [ip, setIp] = useState("")
+  const [port, setPort] = useState(0)
 
   useEffect(() => {
-    tor.startIfNotStarted();
+    console.log("connecting tor...");
+    tor.startIfNotStarted().then((p) => {
+      setPort(p);
+      console.log(`running tor on port :${p}`);
+    }).catch((err) => {
+      console.error(err);
+    });
     try {
       tor.get('https://api.ipify.org/?format=json').then(resp => {
         console.log(resp);
