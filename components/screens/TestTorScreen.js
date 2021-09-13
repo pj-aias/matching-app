@@ -5,12 +5,10 @@ import Tor from 'react-native-tor';
 export const TestTorScreen = (navigation) => {
   const tor = Tor();
   const [ip, setIp] = useState("")
-  const [port, setPort] = useState(0)
 
   useEffect(() => {
     console.log("connecting tor...");
     tor.startIfNotStarted().then((p) => {
-      setPort(p);
       console.log(`running tor on port :${p}`);
     }).catch((err) => {
       console.error(err);
@@ -23,7 +21,7 @@ export const TestTorScreen = (navigation) => {
     } catch (error) {
       console.log("tor error:", error);
     }
-  })
+  }, [])
 
   return (
     <View>
