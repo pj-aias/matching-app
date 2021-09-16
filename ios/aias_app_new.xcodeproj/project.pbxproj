@@ -15,6 +15,9 @@
 		7EF68E3733C33B6898317E18 /* libPods-aias_app_new-aias_app_newTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-aias_app_new-aias_app_newTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		BC85226626E8FD8800996B69 /* BridgingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC85226526E8FD8800996B69 /* BridgingHeader.swift */; };
+		BC1B029AF86BA091B2D32DFF /* libPods-MatchingApp-MatchingAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C07EEA78FC254710094A9BF /* libPods-MatchingApp-MatchingAppTests.a */; };
+		D1A7597E26DE29CD00DAF984 /* DistributedBbs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A7597D26DE29CD00DAF984 /* DistributedBbs.swift */; };
+		D1A7598026DE2A8200DAF984 /* DistributedBbs.m in Sources */ = {isa = PBXBuildFile; fileRef = D1A7597F26DE2A8200DAF984 /* DistributedBbs.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +100,8 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				BC85226526E8FD8800996B69 /* BridgingHeader.swift */,
 				BC85226426E8FD8700996B69 /* aias_app_new-Bridging-Header.h */,
+				D1A7597D26DE29CD00DAF984 /* DistributedBbs.swift */,
+				D1A7597F26DE2A8200DAF984 /* DistributedBbs.m */,
 			);
 			name = aias_app_new;
 			sourceTree = "<group>";
@@ -380,8 +385,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				D1A7598026DE2A8200DAF984 /* DistributedBbs.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				BC85226626E8FD8800996B69 /* BridgingHeader.swift in Sources */,
+				D1A7597E26DE29CD00DAF984 /* DistributedBbs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
