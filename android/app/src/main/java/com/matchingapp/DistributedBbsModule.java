@@ -12,6 +12,7 @@ public class DistributedBbsModule extends ReactContextBaseJavaModule {
        super(context);
    }
 
+   @Override
    public String getName() {
        return "DistributedBbs";
    }
