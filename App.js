@@ -30,13 +30,6 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="TestTor"
-            component={TestTorScreen}
-            options={{
-              headerShown: false
-            }}
-          />
-          <Stack.Screen
             name="TOP"
             component={Top}
             options={{
@@ -72,6 +65,13 @@ const App = () => {
             name="ChatIndex"
             component={ChatIndex}
             options={theme}
+          />
+          <Stack.Screen
+            name="TestTor"
+            component={TestTorScreen}
+            options={{
+              headerShown: false
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

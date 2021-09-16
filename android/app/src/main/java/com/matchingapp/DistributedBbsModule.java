@@ -14,6 +14,6 @@ public class DistributedBbsModule extends ReactContextBaseJavaModule {
 
    @Override
    public String getName() {
-       return "DistributedBbs";
+       return "DistributedBbsModule";
    }
 }

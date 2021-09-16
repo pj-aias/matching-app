@@ -10,10 +10,14 @@ import com.facebook.react.bridge.ReactMethod;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.lang.RuntimeException;
+import android.util.Log;
+
 
 public class MatchingAppPackage implements ReactPackage {
     static {
-        System.loadLibrary("distributed_bbs_mobile");
+        //System.loadLibrary("distributed_bbs_mobile");
+       Log.d("MatchingAppPackage", "package init called");
     }
 
    @Override
@@ -24,17 +28,29 @@ public class MatchingAppPackage implements ReactPackage {
    @Override
    public List<NativeModule> createNativeModules(
            ReactApplicationContext reactContext) {
+       Log.d("createNativeModules", "register called");
        List<NativeModule> modules = new ArrayList<>();
 
        modules.add(new DistributedBbsModule(reactContext));
+
+       if (modules.size() < 1) {
+        throw new RuntimeException();
+       } else if (modules.size() == 1) {
+           Log.d("createNativeModule",  "length: " + modules.size());
+           Log.e("createNativeModule",  "length: " + modules.size());
+        throw new RuntimeException();
+       }
+
 
        return modules;
    }
 
    @ReactMethod
    public void getRustNumber(Promise promise) {
-       promise.resolve(rust_number());
+       Log.d("number", "rust number bridge called");
+       //promise.resolve(rust_number());
+       promise.resolve(47);
    }
 
-   private static native String rust_number();
+   //private static native String rust_number();
 }
