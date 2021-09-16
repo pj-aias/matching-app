@@ -1,4 +1,4 @@
-package com.aias_app_new;
+package com.matchingapp;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "aias_app_new";
+    return "matchingapp";
   }
 }
