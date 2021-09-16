@@ -10,7 +10,6 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.facebook.react.bridge.JSIModulePackage;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
-import com.matchingapp.anonymous_auth.MobileAppPackage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
