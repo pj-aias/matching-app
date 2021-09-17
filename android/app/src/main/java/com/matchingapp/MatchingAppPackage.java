@@ -27,19 +27,9 @@ public class MatchingAppPackage implements ReactPackage {
    @Override
    public List<NativeModule> createNativeModules(
            ReactApplicationContext reactContext) {
-       Log.d("createNativeModules", "register called");
        List<NativeModule> modules = new ArrayList<>();
 
        modules.add(new DistributedBbsModule(reactContext));
-
-       if (modules.size() < 1) {
-        //throw new RuntimeException();
-       } else if (modules.size() == 1) {
-           Log.d("createNativeModule",  "length: " + modules.size());
-           Log.e("createNativeModule",  "length: " + modules.size());
-        //throw new RuntimeException();
-       }
-
 
        return modules;
    }

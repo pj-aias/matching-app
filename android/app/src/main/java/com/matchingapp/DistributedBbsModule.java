@@ -18,7 +18,6 @@ public class DistributedBbsModule extends ReactContextBaseJavaModule {
        return "DistributedBbsModule";
    }
 
-
     @ReactMethod
     public void getRustNumber(Promise promise) {
         //promise.resolve(rust_number());
