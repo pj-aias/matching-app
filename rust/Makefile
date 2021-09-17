@@ -54,7 +54,7 @@ ios: target/universal/release/libdistributed_bbs.a $(IOS_MODULE_HEADER)
 
 target/universal/release/libdistributed_bbs.a: $(SOURCES)
 	@if [ $$(uname) == "Darwin" ] ; then \
-		cargo lipo --release ; \
+		cargo lipo --release --features ios ; \
 		else echo "Skipping iOS compilation on $$(uname)" ; \
 	fi
 	@echo "[DONE] $@"
@@ -69,25 +69,25 @@ android: target/aarch64-linux-android/release/libdistributed_bbs.so target/armv7
 target/aarch64-linux-android/release/libdistributed_bbs.so: $(SOURCES) ndk-home
 	CC_aarch64_linux_android=$(ANDROID_AARCH64_LINKER) \
 	CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$(ANDROID_AARCH64_LINKER) \
-		cargo +nightly build --target aarch64-linux-android --release
+		cargo +nightly build --features android --target aarch64-linux-android --release
 	@echo "[DONE] $@"
 
 target/armv7-linux-androideabi/release/libdistributed_bbs.so: $(SOURCES) ndk-home
 	CC_armv7_linux_androideabi=$(ANDROID_ARMV7_LINKER) \
 	CARGO_TARGET_ARMV7_LINUX_ANDROIDEABI_LINKER=$(ANDROID_ARMV7_LINKER) \
-		cargo +nightly build --target armv7-linux-androideabi --release
+		cargo +nightly build --features android --target armv7-linux-androideabi --release
 	@echo "[DONE] $@"
 
 target/i686-linux-android/release/libdistributed_bbs.so: $(SOURCES) ndk-home
 	CC_i686_linux_android=$(ANDROID_I686_LINKER) \
 	CARGO_TARGET_I686_LINUX_ANDROID_LINKER=$(ANDROID_I686_LINKER) \
-		cargo +nightly  build --target i686-linux-android --release
+		cargo +nightly  build --features android --target i686-linux-android --release
 	@echo "[DONE] $@"
 
 target/x86_64-linux-android/release/libdistributed_bbs.so: $(SOURCES) ndk-home
 	CC_x86_64_linux_android=$(ANDROID_X86_64_LINKER) \
 	CARGO_TARGET_X86_64_LINUX_ANDROID_LINKER=$(ANDROID_X86_64_LINKER) \
-		cargo +nightly build --target x86_64-linux-android --release
+		cargo +nightly build --features android --target x86_64-linux-android --release
 	@echo "[DONE] $@"
 		
 .PHONY: ndk-home
@@ -101,7 +101,7 @@ ndk-home:
 bindings: target/bindings.h
 
 $(BINDINGS_HEADER): $(SOURCES)
-	cbindgen $^ -c cbindgen.toml | grep -v \#include | uniq > $@
+	cbindgen src/lib.rs -c cbindgen.toml | grep -v \#include | uniq > $@
 	@echo "[DONE] $@"
 
 ## :

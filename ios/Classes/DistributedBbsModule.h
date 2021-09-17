@@ -1,11 +1,29 @@
 #import <React/RCTBridgeModule.h>
 @interface RCTCalendarModule : NSObject <RCTBridgeModule>
-@end// NOTE: Append the lines below to ios/Classes/GreeterPlugin.h
+@end#ifndef CBINDGEN_BINDINGS_H
+#define CBINDGEN_BINDINGS_H
 
-char *mobile_sign(const char *msg, const char *cred, const char *gpk, const char *seed);
+int32_t rust_number(void);
 
-bool mobile_verify(const char *msg, const char *signature, const char *gpk);
+jstring Java_com_matchingapp_DistributedBbsModule_sign(JNIEnv env,
+                                                       JClass,
+                                                       JString msg,
+                                                       JString cred,
+                                                       JString gpk,
+                                                       JString seed);
 
-intptr_t rust_number(void);
+bool Java_com_matchingapp_DistributedBbsModule_verify(JNIEnv env,
+                                                      JClass,
+                                                      JString msg,
+                                                      JString signature,
+                                                      JString gpk);
+
+int32_t Java_com_matchingapp_DistributedBbsModule_rust_number(JNIEnv, JClass);
+
+char *sign(const char *msg, const char *cred, const char *gpk, const char *seed);
+
+bool verify(const char *msg, const char *signature, const char *gpk);
 
 void rust_cstr_free(char *s);
+
+#endif /* CBINDGEN_BINDINGS_H */

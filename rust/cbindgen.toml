@@ -1,8 +1,11 @@
 language = "C"
-autogen_warning = "// NOTE: Append the lines below to ios/Classes/GreeterPlugin.h"
-#namespace = "ffi"
-#include_guard = "CBINDGEN_BINDINGS_H"
+include_guard = "CBINDGEN_BINDINGS_H"
 
 [defines]
 "target_os = ios" = "TARGET_OS_IOS"
 "target_os = macos" = "TARGET_OS_MACOS"
+
+[parse.expand]
+features = ["cbindgen"]
+default_features = false
+all_features = false
