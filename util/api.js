@@ -2,7 +2,7 @@ import axios from 'axios';
 import Tor from 'react-native-tor';
 
 const apiScheme = 'http';
-const apiHost = '192.168.64.1';
+const apiHost = 'yjqictkblqijcsldpwvkd2addy2kc7edpffeg64lhynruy3kxl7s5zid.onion';
 const apiPort = 80;
 
 const tor = Tor();
