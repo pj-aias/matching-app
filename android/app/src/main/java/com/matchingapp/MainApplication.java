@@ -1,4 +1,4 @@
-package com.aias_app_new;
+package com.matchingapp;
 
 import android.app.Application;
 import android.content.Context;
@@ -12,6 +12,7 @@ import com.facebook.react.bridge.JSIModulePackage;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import android.util.Log;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+          packages.add(new MatchingAppPackage());
           return packages;
         }
 
@@ -69,7 +71,7 @@ public class MainApplication extends Application implements ReactApplication {
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-        Class<?> aClass = Class.forName("com.aias_app_new.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("com.matchingapp.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);
@@ -85,3 +87,5 @@ public class MainApplication extends Application implements ReactApplication {
     }
   }
 }
+
+
