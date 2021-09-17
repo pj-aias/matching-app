@@ -9,6 +9,10 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class DistributedBbsModule extends ReactContextBaseJavaModule {
+    static {
+        System.loadLibrary("distributed_bbs_mobile");
+    }
+
    DistributedBbsModule(ReactApplicationContext context) {
        super(context);
    }
@@ -20,9 +24,9 @@ public class DistributedBbsModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getRustNumber(Promise promise) {
-        //promise.resolve(rust_number());
-        promise.resolve(47);
+        promise.resolve(rust_number());
+        //promise.resolve(47);
     }
 
-    //private static native String rust_number();
+    private static native int rust_number();
 }

@@ -14,11 +14,6 @@ import android.util.Log;
 
 
 public class MatchingAppPackage implements ReactPackage {
-    static {
-        //System.loadLibrary("distributed_bbs_mobile");
-       Log.d("MatchingAppPackage", "package init called");
-    }
-
    @Override
    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
        return Collections.emptyList();

@@ -1,8 +1,8 @@
 #[macro_use]
 extern crate arrayref;
 
-use std::os::raw::{c_char};
-use std::ffi::{CString, CStr};
+use std::ffi::{CStr, CString};
+use std::os::raw::c_char;
 
 use distributed_bss::sign;
 use distributed_bss::verify;
@@ -28,7 +28,12 @@ fn decode<'a, T: DeserializeOwned>(point: &str) -> T {
 }
 
 #[no_mangle]
-pub extern fn mobile_sign(msg: *const c_char, cred: *const c_char, gpk: *const c_char, seed: *const c_char) -> *mut c_char {
+pub extern "C" fn mobile_sign(
+    msg: *const c_char,
+    cred: *const c_char,
+    gpk: *const c_char,
+    seed: *const c_char,
+) -> *mut c_char {
     let msg = unsafe { CStr::from_ptr(msg) }.to_str().unwrap();
     let cred = unsafe { CStr::from_ptr(cred) }.to_str().unwrap();
     let gpk = unsafe { CStr::from_ptr(gpk) }.to_str().unwrap();
@@ -47,7 +52,11 @@ pub extern fn mobile_sign(msg: *const c_char, cred: *const c_char, gpk: *const c
 }
 
 #[no_mangle]
-pub extern fn mobile_verify(msg: *const c_char, signature: *const c_char, gpk: *const c_char) -> bool {
+pub extern "C" fn mobile_verify(
+    msg: *const c_char,
+    signature: *const c_char,
+    gpk: *const c_char,
+) -> bool {
     let signature = unsafe { CStr::from_ptr(signature).to_str().unwrap() };
     let signature: Signature = decode(signature);
     let gpk = unsafe { CStr::from_ptr(gpk) }.to_str().unwrap();
@@ -59,14 +68,16 @@ pub extern fn mobile_verify(msg: *const c_char, signature: *const c_char, gpk: *
 }
 
 #[no_mangle]
-pub extern fn rust_number() -> isize {
+pub extern "C" fn rust_number() -> i32 {
     57
 }
 
 #[no_mangle]
-pub extern fn rust_cstr_free(s: *mut c_char) {
+pub extern "C" fn rust_cstr_free(s: *mut c_char) {
     unsafe {
-        if s.is_null() { return }
+        if s.is_null() {
+            return;
+        }
         CString::from_raw(s)
     };
 }
@@ -115,9 +126,18 @@ fn test() {
     let usk = CString::new(encode(&usk)).unwrap();
 
     let seed = CString::new(base64::encode("hogehogehogehogehogehogehogehoge")).unwrap();
-    let sig = mobile_sign(msg.clone().into_raw(), usk.into_raw(), gpk.clone().into_raw(), seed.into_raw());
+    let sig = mobile_sign(
+        msg.clone().into_raw(),
+        usk.into_raw(),
+        gpk.clone().into_raw(),
+        seed.into_raw(),
+    );
 
-    assert!(mobile_verify(msg.clone().into_raw(), sig, gpk.clone().into_raw()));
+    assert!(mobile_verify(
+        msg.clone().into_raw(),
+        sig,
+        gpk.clone().into_raw()
+    ));
     assert!(!mobile_verify(msg2.into_raw(), sig, gpk.into_raw()));
 }
 

@@ -8,12 +8,12 @@ const { DistributedBbsModule } = NativeModules;
 const Top = ({ navigation }) => {
   const [number, setNumber] = useState(0);
 
+  console.log('module: ', DistributedBbsModule)
+  console.log('modules: ', NativeModules);
+
   useEffect(() => {
     DistributedBbsModule.getRustNumber().then(setNumber);
   }, [])
-
-  console.log('module: ', DistributedBbsModule)
-  console.log('modules: ', NativeModules);
 
   return (
     <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
