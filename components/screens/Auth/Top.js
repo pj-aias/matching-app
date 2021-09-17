@@ -13,6 +13,8 @@ const Top = ({ navigation }) => {
 
   useEffect(() => {
     DistributedBbsModule.getRustNumber().then(setNumber);
+    DistributedBbsModule.sign("", "", "", "").then(console.log());
+    DistributedBbsModule.verify("", "", "").then(console.log());
   }, [])
 
   return (

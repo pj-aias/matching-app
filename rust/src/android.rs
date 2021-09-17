@@ -4,7 +4,7 @@ use jni::sys::jstring;
 use jni::JNIEnv;
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_sign(
+pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_rust_1sign(
     env: JNIEnv,
     _: JClass,
     msg: JString,
@@ -42,7 +42,7 @@ pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_sign(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_verify(
+pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_rust_1verify(
     env: JNIEnv,
     _: JClass,
     msg: JString,
