@@ -4,6 +4,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.Promise;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -16,4 +17,13 @@ public class DistributedBbsModule extends ReactContextBaseJavaModule {
    public String getName() {
        return "DistributedBbsModule";
    }
+
+
+    @ReactMethod
+    public void getRustNumber(Promise promise) {
+        //promise.resolve(rust_number());
+        promise.resolve(47);
+    }
+
+    //private static native String rust_number();
 }

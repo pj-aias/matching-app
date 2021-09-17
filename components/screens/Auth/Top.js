@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, Button } from "react-native-elements";
 import { NativeModules, SafeAreaView, View } from "react-native";
 
@@ -6,6 +6,12 @@ const { DistributedBbsModule } = NativeModules;
 
 //const a = MobileAppBridge.sign("", "", "", "", "");
 const Top = ({ navigation }) => {
+  const [number, setNumber] = useState(0);
+
+  useEffect(() => {
+    DistributedBbsModule.getRustNumber().then(setNumber);
+  }, [])
+
   console.log('module: ', DistributedBbsModule)
   console.log('modules: ', NativeModules);
 
@@ -18,7 +24,7 @@ const Top = ({ navigation }) => {
         <Button title="サインアップ"
           onPress={() => { navigation.navigate('Signup') }}
         />
-        <Text>number from rust: {DistributedBbsModule.getRustNumber()}</Text>
+        <Text>number from rust: {number}</Text>
       </View>
     </SafeAreaView>
   );
