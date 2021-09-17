@@ -106,16 +106,11 @@ mod test {
 
     use super::*;
 
-    #[cfg(feature = "ios")]
     #[test]
     fn test() {
-        use std::ffi::CString;
-
         use distributed_bss::gm::{GMId, GM};
         use distributed_bss::{CombinedGPK, CombinedUSK};
         use rand::thread_rng;
-
-        use super::ios::*;
 
         let mut rng = thread_rng();
 
@@ -145,27 +140,23 @@ mod test {
             w,
         };
 
-        let msg = CString::new("hoge").unwrap();
-        let msg2 = CString::new("piyo").unwrap();
+        let msg = String::from("hoge");
+        let msg2 = String::from("piyo");
 
         let usk = CombinedUSK::new(&partials);
-        let gpk = CString::new(encode(&gpk)).unwrap();
-        let usk = CString::new(encode(&usk)).unwrap();
+        let gpk = String::from(encode(&gpk));
+        let usk = String::from(encode(&usk));
 
-        let seed = CString::new(base64::encode("hogehogehogehogehogehogehogehoge")).unwrap();
-        let sig = mobile_sign(
-            msg.clone().into_raw(),
-            usk.into_raw(),
-            gpk.clone().into_raw(),
-            seed.into_raw(),
+        let seed = String::from(base64::encode("hogehogehogehogehogehogehogehoge"));
+
+        println!(
+            r#"sign params: "{}", "{}", "{}", "{}""#,
+            msg, usk, gpk, seed
         );
+        let sig = mobile_sign(&msg, &usk, &gpk, &seed);
 
-        assert!(mobile_verify(
-            msg.clone().into_raw(),
-            sig,
-            gpk.clone().into_raw()
-        ));
-        assert!(!mobile_verify(msg2.into_raw(), sig, gpk.into_raw()));
+        assert!(mobile_verify(&msg, &sig, &gpk));
+        assert!(!mobile_verify(&msg2, &sig, &gpk));
     }
 
     #[test]
