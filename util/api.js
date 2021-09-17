@@ -10,34 +10,31 @@ const tor = Tor();
 let authToken = '';
 
 const buildApiUrl = (path, host) => `${apiScheme}://${host || apiHost}:${apiPort}${path}`;
-const addAuthorizationHeader = (data) => ({
-    ...data,
-    headers: {
-        ...data.headers,
-        "Authorization": `Bearer ${authToken}`
-    }
+const addAuthorizationHeader = (headers) => ({
+    ...headers,
+    "Authorization": `Bearer ${authToken}`
 });
 
 export const sendRequest = (method, url, headers, body) => {
     switch (method) {
         case 'GET':
-            tor.get(url, headers);
-            break;
+            return tor.get(url, headers);
         case 'POST':
-            tor.post(url, body, headers);
-            break;
+            return tor.post(url, body, headers);
         case 'DELETE':
-            tor.patch(url, body, headers);
-            break;
+            return tor.delete(url, body, headers);
+        //case 'PATCH':
+        default:
+            return Promise.reject("not supported method: " + method);
     }
 }
 
-export const sendAPIRequest = (endpoint, data) => axios({
-    ...data,
-    url: buildApiUrl(endpoint)
-});
+export const sendAPIRequest = (method, endpoint, headers, body) => {
+    const url = buildApiUrl(endpoint);
+    return sendRequest(method, url, headers, body);
+}
 
-export const sendAPIRequestAuth = (endpoint, data) => sendAPIRequest(endpoint, addAuthorizationHeader(data));
+export const sendAPIRequestAuth = (method, endpoint, headers, body) => sendAPIRequest(method, endpoint, addAuthorizationHeader(headers), body);
 
 export const setAuthToken = (tokenString) => {
     authToken = tokenString;
