@@ -50,7 +50,9 @@ const Top = ({ navigation }) => {
         <Button title="サインアップ"
           onPress={() => { navigation.navigate('Signup') }}
         />
-        <Text>number from rust: {number}</Text>
+      </View>
+      <View>
+        <Text>{number ? `number from rust: ${number}` : "calling rust..."}</Text>
       </View>
     </SafeAreaView>
   );
