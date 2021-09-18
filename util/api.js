@@ -21,6 +21,7 @@ export class APIHandler {
         APIHandler.tor.startIfNotStarted();
         this.authToken = '';
         this.url = APIHandler.buildApiUrl(endpoint);
+        this.endpoint = endpoint
         this.headers = {};
     }
 
@@ -40,21 +41,21 @@ export class APIHandler {
 
     get(data = {}) {
         const headers = this.makeHeaders(data.headers);
-        console.log("sending requets...");
+        console.log(`GET ${this.endpoint}`);
         return APIHandler.tor.get(this.url, headers);
     }
 
     post(data = {}) {
         const body = data.body ? JSON.stringify(data.body) : '';
         const headers = this.makeHeaders(data.headers);
-        console.log("sending requets...");
+        console.log(`POST ${this.endpoint}`);
         return APIHandler.tor.post(this.url, body, headers);
     }
 
     delete(data = {}) {
         const body = data.body ? JSON.stringify(data.body) : '';
         const headers = this.makeHeaders(data.headers);
-        console.log("sending requets...");
+        console.log(`DELETE ${this.endpoint}`);
         return APIHandler.tor.delete(this.url, body, headers);
     }
 }
