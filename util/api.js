@@ -25,30 +25,36 @@ export class APIHandler {
     }
 
     withAuth() {
-        this.headers['Authorization'] = `Bearer ${authToken}`;
+        this.headers['Authorization'] = `Bearer ${APIHandler.authToken}`;
+        return this;
     }
 
     makeHeaders(headers) {
-        return {
-            ...this.headers,
-            ...headers
-        }
+        return headers
+            ? {
+                ...this.headers,
+                ...headers
+            }
+            : this.headers;
     }
 
-    get(data) {
+    get(data = {}) {
         const headers = this.makeHeaders(data.headers);
+        console.log("sending requets...");
         return APIHandler.tor.get(this.url, headers);
     }
 
-    post(data) {
-        const body = JSON.stringify(data.body);
+    post(data = {}) {
+        const body = data.body ? JSON.stringify(data.body) : '';
         const headers = this.makeHeaders(data.headers);
+        console.log("sending requets...");
         return APIHandler.tor.post(this.url, body, headers);
     }
 
-    delete(data) {
-        const body = JSON.stringify(data.body);
+    delete(data = {}) {
+        const body = data.body ? JSON.stringify(data.body) : '';
         const headers = this.makeHeaders(data.headers);
+        console.log("sending requets...");
         return APIHandler.tor.delete(this.url, body, headers);
     }
 }
