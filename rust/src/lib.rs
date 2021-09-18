@@ -72,6 +72,7 @@ pub extern "C" fn rust_number() -> i32 {
 
 #[cfg(feature = "ios")]
 pub mod ios {
+    // TODO handle `unwrap` / `expect`s
 
     use std::ffi::{CStr, CString};
     use std::os::raw::c_char;
