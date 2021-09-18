@@ -21,30 +21,32 @@ where
     base64::encode(&point)
 }
 
-fn decode<'a, T: DeserializeOwned>(point: &str) -> T {
-    let point = base64::decode(point).expect("base64 decode error");
-    rmp_serde::from_read(&*point).expect("rmp decode error")
+fn decode<'a, T: DeserializeOwned>(point: &str) -> Result<T, String> {
+    let point = base64::decode(point).or(Err("base64 decode error"))?;
+    let result = rmp_serde::from_read(&*point).or(Err("base64 decode error"))?;
+    Ok(result)
 }
 
-pub fn mobile_sign(msg: &str, cred: &str, gpk: &str, seed: &str) -> String {
-    let seed = base64::decode(seed).expect("base64 decode error");
+pub fn mobile_sign(msg: &str, cred: &str, gpk: &str, seed: &str) -> Result<String, String> {
+    let seed = base64::decode(seed).or(Err("base64 decode error"))?;
     let seed = array_ref!(seed, 0, 32);
 
     let mut rng = StdRng::from_seed(*seed);
 
-    let cred: CombinedUSK = decode(&cred.to_string());
-    let gpk: CombinedGPK = decode(&gpk.to_string());
+    let cred: CombinedUSK = decode(&cred.to_string())?;
+    let gpk: CombinedGPK = decode(&gpk.to_string())?;
 
     let signature = distributed_bss::sign(msg.as_bytes(), &cred, &gpk, &mut rng);
 
-    encode(&signature)
+    Ok(encode(&signature))
 }
 
-pub fn mobile_verify(msg: &str, signature: &str, gpk: &str) -> bool {
-    let signature: Signature = decode(signature);
-    let gpk: CombinedGPK = decode(gpk);
+pub fn mobile_verify(msg: &str, signature: &str, gpk: &str) -> Result<String, String> {
+    let signature: Signature = decode(signature)?;
+    let gpk: CombinedGPK = decode(gpk)?;
 
-    distributed_bss::verify(msg.as_bytes(), &signature, &gpk).is_ok()
+    let result = distributed_bss::verify(msg.as_bytes(), &signature, &gpk).is_ok();
+    return Ok(result.to_string());
 }
 
 #[no_mangle]
@@ -153,10 +155,13 @@ mod test {
             r#"sign params: "{}", "{}", "{}", "{}""#,
             msg, usk, gpk, seed
         );
-        let sig = mobile_sign(&msg, &usk, &gpk, &seed);
+        let sig = mobile_sign(&msg, &usk, &gpk, &seed).unwrap();
 
-        assert!(mobile_verify(&msg, &sig, &gpk));
-        assert!(!mobile_verify(&msg2, &sig, &gpk));
+        assert_eq!(mobile_verify(&msg, &sig, &gpk).unwrap(), "true".to_string());
+        assert_eq!(
+            mobile_verify(&msg2, &sig, &gpk).unwrap(),
+            "false".to_string()
+        );
     }
 
     #[test]
