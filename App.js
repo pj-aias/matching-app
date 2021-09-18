@@ -28,7 +28,7 @@ const theme = {
 const App = () => {
   // prefetch to establish TCP connection to API server
   useEffect(() => {
-    new APIHandler('/').get().then((res) => console.log("GET /: ", res));
+    new APIHandler('/').get().then(console.log);
   }, []);
 
   return (
