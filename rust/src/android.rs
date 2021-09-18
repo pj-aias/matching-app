@@ -48,7 +48,7 @@ pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_rust_1verify(
     msg: JString,
     signature: JString,
     gpk: JString,
-) -> bool {
+) -> jstring {
     let msg: String = env
         .get_string(msg)
         .expect("Couldn't get java string!")
@@ -64,7 +64,13 @@ pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_rust_1verify(
         .expect("Couldn't get java string!")
         .into();
 
-    mobile_verify(&msg, &signature, &gpk)
+    let result = mobile_verify(&msg, &signature, &gpk).err();
+
+    let result = env
+        .new_string(result)
+        .expect("Couldn't generate java string!");
+
+    result.into_inner()
 }
 
 #[no_mangle]
