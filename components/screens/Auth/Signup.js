@@ -1,19 +1,19 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text } from 'react-native';
 import { Formik } from 'formik';
-import authSchema from '../../../util/yup.js'
-import { sendAPIRequest, setAuthToken } from '../../../util/api.js'
+import authSchema from '../../../util/yup.js';
+import { APIHandler } from '../../../util/api';
 import { Button, Input } from 'react-native-elements';
 import axios from 'axios';
 
 const Signup = ({ navigation }) => {
+  const [error, setError] = useState('');
 
   const handleSubmit = async (name, password) => {
     console.log(name, password);
 
-    const result = await sendAPIRequest('/user', {
-      method: 'POST',
-      data: {
+    const result = new APIHandler('/user').post({
+      body: {
         "username": name,
         "password": password,
         "signature": "test"
@@ -21,15 +21,15 @@ const Signup = ({ navigation }) => {
     })
       .then((res) => {
         console.log(res);
+        APIHandler.setAuthToken(res.json.token);
         navigation.reset({
           index: 0,
           routes: [{ name: 'Start' }],
         });
-        setAuthToken(res.data.token);
       })
       .catch((err) => {
-        console.log(err);
         console.log(err.message);
+        setError(err.message)
       });
   }
 
@@ -80,6 +80,7 @@ const Signup = ({ navigation }) => {
           </View>
         )}
       </Formik>
+      <Text>{error ? `エラー: ${error}` : ''}</Text>
     </View>
   );
 }

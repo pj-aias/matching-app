@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Button, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { sendAPIRequestAuth, showAxiosError } from '../../util/api';
+import { APIHandler } from '../../util/api';
 
 export const getUserNames = (chatroom) => (
   chatroom.users
@@ -21,29 +21,30 @@ const Chat = ({ route, navigation }) => {
   const { roomId } = route.params;
 
   const syncMessages = () => {
-    sendAPIRequestAuth('/message/' + roomId, {
-      method: 'GET'
-    }).then((res) => {
-      console.log('GET /message');
-      console.log(res);
-      console.log(res.data);
-      setMessages(res.data.messages);
-      setRoom(res.data.chatroom);
-    }).catch(showAxiosError);
+    new APIHandler('/message/' + roomId)
+      .withAuth()
+      .get()
+      .then((res) => {
+        console.log('GET /message');
+        console.log(res);
+        setRoom(res.json.chatroom);
+        setMessages(res.json.messages);
+      }).catch(console.log);
   }
 
   const sendMessage = (content) => {
     console.log(`send message "${content}"`)
-    sendAPIRequestAuth(`/message/${roomId}`, {
-      method: 'POSt',
-      data: { content }
-    })
+    new APIHandler(`/message/${roomId}`)
+      .withAuth()
+      .post({
+        body: { content }
+      })
       .then((res) => {
         console.log(res);
         syncMessages();
         setText('');
       })
-      .catch(showAxiosError);
+      .catch(console.log);
   }
 
   // Get messages from API after render (effect), and store them to variable if succeeded

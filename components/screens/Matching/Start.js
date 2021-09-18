@@ -1,22 +1,22 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
-import { sendAPIRequestAuth, showAxiosError } from '../../../util/api.js'
+import { APIHandler } from '../../../util/api.js'
 
 const Start = ({ navigation }) => {
 
   const handleSubmit = async () => {
-    const result = await sendAPIRequestAuth('/matching', {
-      method: 'POST',
-    })
+    const result = await new APIHandler('/matching')
+      .withAuth()
+      .post()
       .then((res) => {
         console.log(res);
         navigation.navigate('Match', {
-          matchedUser: res.data.matched_user,
-          chatroomId: res.data.chatroom.id
+          matchedUser: res.json.matched_user,
+          chatroomId: res.json.chatroom.id
         });
       })
-      .catch(showAxiosError);
+      .catch(console.log);
   }
 
   const goToChatIndex = () => {

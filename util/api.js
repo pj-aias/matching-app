@@ -1,44 +1,61 @@
 import axios from 'axios';
+import Tor from 'react-native-tor';
 
-import { API_HOST, API_PORT } from '@env';
+export class APIHandler {
+    static tor = Tor();
+    static authToken = '';
 
-const apiScheme = 'http';
-let authToken = '';
+    static scheme = 'http';
+    static host = 'yjqictkblqijcsldpwvkd2addy2kc7edpffeg64lhynruy3kxl7s5zid.onion';
+    static port = 80;
 
-const generateApiUrl = (path) => `${apiScheme}://${API_HOST}:${API_PORT}${path}`;
-
-export const sendAPIRequest = (endpoint, data) => axios({
-    ...data,
-    url: generateApiUrl(apiScheme, endpoint)
-});
-
-export const sendAPIRequestAuth = (endpoint, data) => {
-    let authData = {
-        ...data
-    };
-    authData.headers['Authorization'] = `Bearer ${authToken}`;
-
-    return sendAPIRequest(endpoint, authData);
-}
-
-export const setAuthToken = (tokenString) => {
-    authToken = tokenString;
-}
-
-export const showAxiosError = (error) => {
-    if (error.response) {
-        console.log("** error response **")
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-    }
-    if (error.request) {
-        console.log("** error request **")
-        console.log(error.request);
+    static buildApiUrl(path, host = APIHandler.host) {
+        return `${APIHandler.scheme}://${host}:${APIHandler.port}${path}`;
     }
 
-    console.log('** error message **');
-    console.log(error.message);
-    console.log('** error config **');
-    console.log(error.config);
+    static setAuthToken(tokenString) {
+        APIHandler.authToken = tokenString;
+    }
+
+    constructor(endpoint) {
+        APIHandler.tor.startIfNotStarted();
+        this.authToken = '';
+        this.url = APIHandler.buildApiUrl(endpoint);
+        this.endpoint = endpoint
+        this.headers = {};
+    }
+
+    withAuth() {
+        this.headers['Authorization'] = `Bearer ${APIHandler.authToken}`;
+        return this;
+    }
+
+    makeHeaders(headers) {
+        return headers
+            ? {
+                ...this.headers,
+                ...headers
+            }
+            : this.headers;
+    }
+
+    get(data = {}) {
+        const headers = this.makeHeaders(data.headers);
+        console.log(`GET ${this.endpoint}`);
+        return APIHandler.tor.get(this.url, headers);
+    }
+
+    post(data = {}) {
+        const body = data.body ? JSON.stringify(data.body) : '';
+        const headers = this.makeHeaders(data.headers);
+        console.log(`POST ${this.endpoint}`);
+        return APIHandler.tor.post(this.url, body, headers);
+    }
+
+    delete(data = {}) {
+        const body = data.body ? JSON.stringify(data.body) : '';
+        const headers = this.makeHeaders(data.headers);
+        console.log(`DELETE ${this.endpoint}`);
+        return APIHandler.tor.delete(this.url, body, headers);
+    }
 }
