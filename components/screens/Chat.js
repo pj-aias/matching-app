@@ -28,6 +28,7 @@ const Chat = ({ route, navigation }) => {
         console.log('GET /message');
         console.log(res);
         setRoom(res.json.chatroom);
+        setMessages(res.json.messages);
       }).catch(console.log);
   }
 
