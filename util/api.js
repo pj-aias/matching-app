@@ -1,43 +1,51 @@
 import axios from 'axios';
 import Tor from 'react-native-tor';
 
-const apiScheme = 'http';
-const apiHost = 'yjqictkblqijcsldpwvkd2addy2kc7edpffeg64lhynruy3kxl7s5zid.onion';
-const apiPort = 80;
+class APIHandler {
+    static tor = Tor();
+    static authToken = '';
 
-const tor = Tor();
+    static scheme = 'http';
+    static host = 'yjqictkblqijcsldpwvkd2addy2kc7edpffeg64lhynruy3kxl7s5zid.onion';
+    static port = 80;
 
-let authToken = '';
-
-const buildApiUrl = (path, host) => `${apiScheme}://${host || apiHost}:${apiPort}${path}`;
-const addAuthorizationHeader = (headers) => ({
-    ...headers,
-    "Authorization": `Bearer ${authToken}`
-});
-
-export const sendRequest = (method, url, headers, body) => {
-    switch (method) {
-        case 'GET':
-            return tor.get(url, headers);
-        case 'POST':
-            return tor.post(url, body, headers);
-        case 'DELETE':
-            return tor.delete(url, body, headers);
-        //case 'PATCH':
-        default:
-            return Promise.reject("not supported method: " + method);
+    static buildApiUrl(path, host = APIHandler.host) {
+        return `${APIHandler.scheme}://${host}:${APIHandler.port}${path}`;
     }
-}
 
-export const sendAPIRequest = (method, endpoint, headers, body) => {
-    const url = buildApiUrl(endpoint);
-    return sendRequest(method, url, headers, body);
-}
+    constructor(endpoint) {
+        APIHandler.tor.startIfNotStarted();
+        this.authToken = '';
+        this.url = buildApiUrl(endpoint);
+        this.headers = {};
+    }
 
-export const sendAPIRequestAuth = (method, endpoint, headers, body) => sendAPIRequest(method, endpoint, addAuthorizationHeader(headers), body);
+    withAuth() {
+        this.headers['Authorization'] = `Bearer ${authToken}`;
+    }
 
-export const setAuthToken = (tokenString) => {
-    authToken = tokenString;
+    makeHeaders(headers) {
+        return {
+            ...this.headers,
+            ...headers
+        }
+    }
+
+    setAuthToken(tokenString) {
+        APIHandler.authToken = tokenString;
+    }
+
+    get(data) {
+        return tor.get(this.url, this.makeHeaders(data.headers));
+    }
+
+    post(data) {
+        return tor.post(url, data.body, this.makeHeaders(data.headers));
+    }
+
+    delete(data) {
+        return tor.delete(url, data.body, this.makeHeaders(data.headers));
+    }
 }
 
 export const showAxiosError = (error) => {
@@ -56,13 +64,4 @@ export const showAxiosError = (error) => {
     console.log(error.message);
     console.log('** error config **');
     console.log(error.config);
-}
-
-export const setupTor = () => {
-    console.log("connecting tor...");
-    tor.startIfNotStarted().then((p) => {
-        console.log(`running tor on port :${p}`);
-    }).catch((err) => {
-        console.error(err);
-    });
 }
