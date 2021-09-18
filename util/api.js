@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Tor from 'react-native-tor';
 
-class APIHandler {
+export class APIHandler {
     static tor = Tor();
     static authToken = '';
 
@@ -13,10 +13,14 @@ class APIHandler {
         return `${APIHandler.scheme}://${host}:${APIHandler.port}${path}`;
     }
 
+    static setAuthToken(tokenString) {
+        APIHandler.authToken = tokenString;
+    }
+
     constructor(endpoint) {
         APIHandler.tor.startIfNotStarted();
         this.authToken = '';
-        this.url = buildApiUrl(endpoint);
+        this.url = APIHandler.buildApiUrl(endpoint);
         this.headers = {};
     }
 
@@ -31,20 +35,21 @@ class APIHandler {
         }
     }
 
-    setAuthToken(tokenString) {
-        APIHandler.authToken = tokenString;
-    }
-
     get(data) {
-        return tor.get(this.url, this.makeHeaders(data.headers));
+        const headers = this.makeHeaders(data.headers);
+        return APIHandler.tor.get(this.url, headers);
     }
 
     post(data) {
-        return tor.post(url, data.body, this.makeHeaders(data.headers));
+        const body = JSON.stringify(data.body);
+        const headers = this.makeHeaders(data.headers);
+        return APIHandler.tor.post(this.url, body, headers);
     }
 
     delete(data) {
-        return tor.delete(url, data.body, this.makeHeaders(data.headers));
+        const body = JSON.stringify(data.body);
+        const headers = this.makeHeaders(data.headers);
+        return APIHandler.tor.delete(this.url, body, headers);
     }
 }
 
