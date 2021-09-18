@@ -16,7 +16,7 @@ const ChatIndex = ({ navigation }) => {
         console.log('get chat index');
         console.log(res);
         setRooms(res.json.chatrooms);
-      }).catch(showAxiosError);
+      }).catch(console.log);
   }, []);
 
   // Returns callback function to open a given chat

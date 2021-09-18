@@ -43,7 +43,7 @@ const Chat = ({ route, navigation }) => {
         syncMessages();
         setText('');
       })
-      .catch(showAxiosError);
+      .catch(console.log);
   }
 
   // Get messages from API after render (effect), and store them to variable if succeeded
