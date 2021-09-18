@@ -4,10 +4,9 @@ import { NativeModules, SafeAreaView, View } from "react-native";
 
 const { DistributedBbsModule } = NativeModules;
 
-//const a = MobileAppBridge.sign("", "", "", "", "");
 const Top = ({ navigation }) => {
-  const [number, setNumber] = useState(0);
   const [signature, setSignature] = useState("");
+  const [verifyResult, setVerifyResult] = useState(null);
 
   console.log('module: ', DistributedBbsModule)
   console.log('modules: ', NativeModules);
@@ -18,10 +17,6 @@ const Top = ({ navigation }) => {
   const seed = "aG9nZWhvZ2Vob2dlaG9nZWhvZ2Vob2dlaG9nZWhvZ2U=";
 
   useEffect(() => {
-    DistributedBbsModule.getRustNumber()
-      .then(setNumber)
-      .catch(console.error);
-
     DistributedBbsModule.sign(msg, cred, gpk, seed)
       .then((s) => {
         setSignature(s);
@@ -29,17 +24,20 @@ const Top = ({ navigation }) => {
       })
       .catch(console.error);
   }, []);
+
   useEffect(() => {
     if (!signature) {
       return;
     }
 
-    let sig = signature.slice(0, signature.length);
-
-    DistributedBbsModule.verify(msg, sig, gpk).then((res) => {
+    DistributedBbsModule.verify(msg, signature, gpk).then((res) => {
       console.log({ "verify result": res });
+      setVerifyResult(res);
     });
   }, [signature])
+
+  const signatureText = signature === "" ? 'signing...' : `signature: ${signature}`;
+  const verifyResultText = verifyResult === null ? 'loading...' : `verify result: ${verifyResult}`;
 
   return (
     <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -52,7 +50,10 @@ const Top = ({ navigation }) => {
         />
       </View>
       <View>
-        <Text>{number ? `number from rust: ${number}` : "calling rust..."}</Text>
+        <Text>{signatureText}</Text>
+      </View>
+      <View>
+        <Text>{verifyResultText}</Text>
       </View>
     </SafeAreaView>
   );
