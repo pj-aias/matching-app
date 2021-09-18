@@ -24,21 +24,32 @@ public class DistributedBbsModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getRustNumber(Promise promise) {
-        promise.resolve(rust_number());
-        //promise.resolve(47);
+        resultToPromise(rust_number(), promise);
     }
 
     @ReactMethod
     public void sign(String msg, String cred, String gpk, String seed, Promise promise) {
-        promise.resolve(rust_sign(msg, cred, gpk, seed));
+        String signature = rust_sign(msg, cred, gpk, seed);
+
+        resultToPromise(signature, promise);
     }
 
     @ReactMethod
     public void verify(String msg, String signature, String gpk, Promise promise) {
-        promise.resolve(rust_verify(msg, signature, gpk));
+        String result = rust_verify(msg, signature, gpk);
+
+        resultToPromise(result, promise);
     }
 
-    private static native int rust_number();
+    void resultToPromise(String result, Promise promise) {
+        if (result.startsWith("ERROR: ")) {
+            promise.reject(result);
+        } else {
+            promise.resolve(result);
+        }
+    }
+
+    private static native String rust_number();
     private static native String rust_sign(String msg, String cred, String gpk, String seed);
-    private static native boolean rust_verify(String msg, String signature, String gpk);
+    private static native String rust_verify(String msg, String signature, String gpk);
 }

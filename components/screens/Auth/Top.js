@@ -18,11 +18,16 @@ const Top = ({ navigation }) => {
   const seed = "aG9nZWhvZ2Vob2dlaG9nZWhvZ2Vob2dlaG9nZWhvZ2U=";
 
   useEffect(() => {
-    DistributedBbsModule.getRustNumber().then(setNumber);
-    DistributedBbsModule.sign(msg, cred, gpk, seed).then((s) => {
-      setSignature(s);
-      console.log({ signature: s });
-    });
+    DistributedBbsModule.getRustNumber()
+      .then(setNumber)
+      .catch(console.error);
+
+    DistributedBbsModule.sign(msg, cred, gpk, seed)
+      .then((s) => {
+        setSignature(s);
+        console.log({ signature: s });
+      })
+      .catch(console.error);
   }, []);
   useEffect(() => {
     if (!signature) {

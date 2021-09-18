@@ -1,4 +1,4 @@
-use crate::{mobile_sign, mobile_verify, rust_number, to_string};
+use crate::{mobile_sign, mobile_verify, rust_number, to_string, MobileResult};
 use jni::objects::{JClass, JString};
 use jni::sys::jstring;
 use jni::JNIEnv;
@@ -75,8 +75,15 @@ pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_rust_1verify(
 
 #[no_mangle]
 pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_rust_1number(
-    _: JNIEnv,
+    env: JNIEnv,
     _: JClass,
-) -> i32 {
-    rust_number()
+) -> jstring {
+    let res: MobileResult<String, String> = Ok(rust_number().to_string());
+    let num = to_string(res);
+
+    let result = env
+        .new_string(num)
+        .expect("Couldn't generate java string!");
+
+    result.into_inner()
 }
