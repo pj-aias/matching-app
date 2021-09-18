@@ -10,8 +10,20 @@ use distributed_bss::CombinedUSK;
 use distributed_bss::Signature;
 use rand::rngs::StdRng;
 use rand::SeedableRng;
+use std::borrow::Borrow;
+
 use serde::de::DeserializeOwned;
 use serde::Serialize;
+
+// FIXME: create our own Result Type
+type MobileResult<T, E> = Result<T, E>;
+
+pub fn to_string<T: Borrow<str>, E: std::fmt::Display>(r: MobileResult<T, E>) -> String {
+        match r {
+            Ok(v) => v.borrow().to_owned(),
+            Err(e) => format!("ERROR: {}", e),
+        }
+}
 
 pub fn encode<T>(point: &T) -> String
 where
@@ -27,14 +39,18 @@ fn decode<'a, T: DeserializeOwned>(point: &str) -> Result<T, String> {
     Ok(result)
 }
 
-pub fn mobile_sign(msg: &str, cred: &str, gpk: &str, seed: &str) -> Result<String, String> {
-    let seed = base64::decode(seed).or(Err("base64 decode error"))?;
+pub fn mobile_sign(msg: &str, cred: &str, gpk: &str, seed: &str) -> MobileResult<String, String> {
+    let seed = base64::decode(seed)
+        .map_err(|e| e.to_string())?;
+
     let seed = array_ref!(seed, 0, 32);
 
     let mut rng = StdRng::from_seed(*seed);
 
-    let cred: CombinedUSK = decode(&cred.to_string())?;
-    let gpk: CombinedGPK = decode(&gpk.to_string())?;
+    let cred: CombinedUSK = decode(&cred.to_string())
+        .map_err(|e| e.to_string())?;
+    let gpk: CombinedGPK = decode(&gpk.to_string())
+        .map_err(|e| e.to_string())?;
 
     let signature = distributed_bss::sign(msg.as_bytes(), &cred, &gpk, &mut rng);
 
