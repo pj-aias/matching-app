@@ -10,8 +10,20 @@ use distributed_bss::CombinedUSK;
 use distributed_bss::Signature;
 use rand::rngs::StdRng;
 use rand::SeedableRng;
+use std::borrow::Borrow;
+
 use serde::de::DeserializeOwned;
 use serde::Serialize;
+
+// FIXME: create our own Result Type
+type MobileResult<T, E> = Result<T, E>;
+
+pub fn to_string<T: Borrow<str>, E: std::fmt::Display>(r: MobileResult<T, E>) -> String {
+        match r {
+            Ok(v) => v.borrow().to_owned(),
+            Err(e) => format!("ERROR: {}", e),
+        }
+}
 
 pub fn encode<T>(point: &T) -> String
 where
@@ -21,30 +33,36 @@ where
     base64::encode(&point)
 }
 
-fn decode<'a, T: DeserializeOwned>(point: &str) -> T {
-    let point = base64::decode(point).expect("base64 decode error");
-    rmp_serde::from_read(&*point).expect("rmp decode error")
+fn decode<'a, T: DeserializeOwned>(point: &str) -> Result<T, String> {
+    let point = base64::decode(point).or(Err("base64 decode error"))?;
+    let result = rmp_serde::from_read(&*point).or(Err("base64 decode error"))?;
+    Ok(result)
 }
 
-pub fn mobile_sign(msg: &str, cred: &str, gpk: &str, seed: &str) -> String {
-    let seed = base64::decode(seed).expect("base64 decode error");
+pub fn mobile_sign(msg: &str, cred: &str, gpk: &str, seed: &str) -> MobileResult<String, String> {
+    let seed = base64::decode(seed)
+        .map_err(|e| e.to_string())?;
+
     let seed = array_ref!(seed, 0, 32);
 
     let mut rng = StdRng::from_seed(*seed);
 
-    let cred: CombinedUSK = decode(&cred.to_string());
-    let gpk: CombinedGPK = decode(&gpk.to_string());
+    let cred: CombinedUSK = decode(&cred.to_string())
+        .map_err(|e| e.to_string())?;
+    let gpk: CombinedGPK = decode(&gpk.to_string())
+        .map_err(|e| e.to_string())?;
 
     let signature = distributed_bss::sign(msg.as_bytes(), &cred, &gpk, &mut rng);
 
-    encode(&signature)
+    Ok(encode(&signature))
 }
 
-pub fn mobile_verify(msg: &str, signature: &str, gpk: &str) -> bool {
-    let signature: Signature = decode(signature);
-    let gpk: CombinedGPK = decode(gpk);
+pub fn mobile_verify(msg: &str, signature: &str, gpk: &str) -> Result<String, String> {
+    let signature: Signature = decode(signature)?;
+    let gpk: CombinedGPK = decode(gpk)?;
 
-    distributed_bss::verify(msg.as_bytes(), &signature, &gpk).is_ok()
+    let result = distributed_bss::verify(msg.as_bytes(), &signature, &gpk).is_ok();
+    return Ok(result.to_string());
 }
 
 #[no_mangle]
@@ -54,6 +72,7 @@ pub extern "C" fn rust_number() -> i32 {
 
 #[cfg(feature = "ios")]
 pub mod ios {
+    // TODO handle `unwrap` / `expect`s
 
     use std::ffi::{CStr, CString};
     use std::os::raw::c_char;
@@ -153,10 +172,13 @@ mod test {
             r#"sign params: "{}", "{}", "{}", "{}""#,
             msg, usk, gpk, seed
         );
-        let sig = mobile_sign(&msg, &usk, &gpk, &seed);
+        let sig = mobile_sign(&msg, &usk, &gpk, &seed).unwrap();
 
-        assert!(mobile_verify(&msg, &sig, &gpk));
-        assert!(!mobile_verify(&msg2, &sig, &gpk));
+        assert_eq!(mobile_verify(&msg, &sig, &gpk).unwrap(), "true".to_string());
+        assert_eq!(
+            mobile_verify(&msg2, &sig, &gpk).unwrap(),
+            "false".to_string()
+        );
     }
 
     #[test]
