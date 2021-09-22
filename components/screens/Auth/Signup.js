@@ -1,47 +1,49 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
-import { Formik } from 'formik';
+import React, {useState} from 'react';
+import {View, Text} from 'react-native';
+import {Formik} from 'formik';
 import authSchema from '../../../util/yup.js';
-import { APIHandler } from '../../../util/api';
-import { Button, Input } from 'react-native-elements';
+import {APIHandler} from '../../../util/api';
+import {Button, Input} from 'react-native-elements';
 import axios from 'axios';
+import {TextInput} from 'react-native-gesture-handler';
 
-const Signup = ({ navigation }) => {
+const Signup = ({navigation}) => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (name, password) => {
     console.log(name, password);
 
-    const result = new APIHandler('/user').post({
-      body: {
-        "username": name,
-        "password": password,
-        "signature": "test"
-      }
-    })
-      .then((res) => {
+    const result = new APIHandler('/user')
+      .post({
+        body: {
+          username: name,
+          password: password,
+          signature: 'test',
+        },
+      })
+      .then(res => {
         console.log(res);
         APIHandler.setAuthToken(res.json.token);
         navigation.reset({
           index: 0,
-          routes: [{ name: 'Start' }],
+          routes: [{name: 'Start'}],
         });
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err.message);
-        setError(err.message)
+        setError(err.message);
       });
-  }
+  };
 
   return (
-    <View style={{
-      padding: 10,
-    }}>
+    <View
+      style={{
+        padding: 10,
+      }}>
       <Formik
-        initialValues={{ name: '', password: '' }}
+        initialValues={{name: '', password: ''}}
         validationSchema={authSchema}
-        onSubmit={values => handleSubmit(values.name, values.password)}
-      >
+        onSubmit={values => handleSubmit(values.name, values.password)}>
         {({
           handleSubmit,
           handleChange,
@@ -52,28 +54,29 @@ const Signup = ({ navigation }) => {
           dirty,
         }) => (
           <View>
-            <Input
+            <TextInput
               name="name"
               type="text"
               placeholder="メールアドレス"
               value={values.name}
               onChangeText={handleChange('name')}
-              onBlur={handleBlur('name')}
+              // onBlur={handleBlur('name')}
               autoComplete="true"
             />
-            <Input
+            <TextInput
               name="password"
               type="password"
               placeholder="パスワード"
               onChangeText={handleChange('password')}
+              // onBlur={handleBlur('password')}
               value={values.password}
-              onBlur={handleBlur('password')}
               secureTextEntry
             />
             <Button
               disabled={!(isValid && dirty)}
               onPress={handleSubmit}
-              title="はじめる" />
+              title="はじめる"
+            />
             {/* <Text>
               「はじめる」をタップすると、プライバシーポリシーと利用規約に承諾したことになります。
             </Text> */}
@@ -83,6 +86,6 @@ const Signup = ({ navigation }) => {
       <Text>{error ? `エラー: ${error}` : ''}</Text>
     </View>
   );
-}
+};
 
 export default Signup;
