@@ -35,6 +35,7 @@ const App = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen name="TOP" component={Top} options={theme} />
           <Stack.Screen name="Signup" component={Signup} options={theme} />
           <Stack.Screen name="Signin" component={Signin} options={theme} />
           <Stack.Screen name="Start" component={Start} options={theme} />
