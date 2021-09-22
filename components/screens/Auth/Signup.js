@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, TextInput} from 'react-native';
 import {Formik} from 'formik';
 import authSchema from '../../../util/yup.js';
 import {APIHandler} from '../../../util/api';
-import {Button, Input} from 'react-native-elements';
+import {Button} from 'react-native-elements';
 import axios from 'axios';
-import {TextInput} from 'react-native-gesture-handler';
 
 const Signup = ({navigation}) => {
   const [error, setError] = useState('');
@@ -60,7 +59,7 @@ const Signup = ({navigation}) => {
               placeholder="メールアドレス"
               value={values.name}
               onChangeText={handleChange('name')}
-              // onBlur={handleBlur('name')}
+              onBlur={handleBlur('name')}
               autoComplete="true"
             />
             <TextInput
@@ -68,8 +67,8 @@ const Signup = ({navigation}) => {
               type="password"
               placeholder="パスワード"
               onChangeText={handleChange('password')}
-              // onBlur={handleBlur('password')}
               value={values.password}
+              onBlur={handleBlur('password')}
               secureTextEntry
             />
             <Button
