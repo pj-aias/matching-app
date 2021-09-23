@@ -1,5 +1,8 @@
 import axios from 'axios';
 import Tor from 'react-native-tor';
+import { NativeModules } from "react-native";
+
+const { DistributedBbsModule } = NativeModules;
 
 export class APIHandler {
     static tor = Tor();
@@ -29,6 +32,14 @@ export class APIHandler {
         this.headers['Authorization'] = `Bearer ${APIHandler.authToken}`;
         return this;
     }
+
+    withAIASSig(usk, gpk, seed) {
+        const signature = DistributedBbsModule.sign(msg, JSON.stringify(usk), JSON.stringify(gpk));
+
+        this.headers['X-AIAS'] = signature;
+        return this;
+    }
+
 
     makeHeaders(headers) {
         return headers
