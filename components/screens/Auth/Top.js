@@ -4,9 +4,15 @@ import { NativeModules, SafeAreaView, View } from "react-native";
 
 const { DistributedBbsModule } = NativeModules;
 
-const Top = ({ navigation }) => {
+const Top = ({ navigation, route }) => {
   const [signature, setSignature] = useState("");
   const [verifyResult, setVerifyResult] = useState(null);
+
+  const result = JSON.parse(route.params.result.replace('?result=', ''));
+  const usk = result.usk;
+
+  console.log("result: ", result);
+  console.log("usk: ", usk);
 
   console.log('module: ', DistributedBbsModule)
   console.log('modules: ', NativeModules);
@@ -25,16 +31,16 @@ const Top = ({ navigation }) => {
       .catch(console.error);
   }, []);
 
-  useEffect(() => {
-    if (!signature) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!signature) {
+  //     return;
+  //   }
 
-    DistributedBbsModule.verify(msg, signature, gpk).then((res) => {
-      console.log({ "verify result": res });
-      setVerifyResult(res);
-    });
-  }, [signature])
+  //   DistributedBbsModule.verify(msg, signature, gpk).then((res) => {
+  //     console.log({ "verify result": res });
+  //     setVerifyResult(res);
+  //   });
+  // }, [signature])
 
   const signatureText = signature === "" ? 'signing...' : `signature: ${signature}`;
   const verifyResultText = verifyResult === null ? 'loading...' : `verify result: ${verifyResult}`;
