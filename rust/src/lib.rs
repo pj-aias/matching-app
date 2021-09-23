@@ -2,15 +2,11 @@
 #[allow(non_snake_case)]
 pub mod android;
 
-#[macro_use]
-extern crate arrayref;
-
 use distributed_bss::CombinedGPK;
 use distributed_bss::CombinedUSK;
 use distributed_bss::Signature;
-use rand::rngs::StdRng;
-use rand::SeedableRng;
 use std::borrow::Borrow;
+use rand::thread_rng;
 
 // FIXME: create our own Result Type
 type MobileResult<T, E> = Result<T, E>;
@@ -22,12 +18,8 @@ pub fn to_string<T: Borrow<str>, E: std::fmt::Display>(r: MobileResult<T, E>) ->
     }
 }
 
-pub fn mobile_sign(msg: &str, cred: &str, gpk: &str, seed: &str) -> MobileResult<String, String> {
-    let seed = base64::decode(seed).map_err(|e| e.to_string())?;
-
-    let seed = array_ref!(seed, 0, 32);
-
-    let mut rng = StdRng::from_seed(*seed);
+pub fn mobile_sign(msg: &str, cred: &str, gpk: &str) -> MobileResult<String, String> {
+    let mut rng = thread_rng();
 
     let cred: CombinedUSK = serde_json::from_str(&cred.to_string()).map_err(|e| e.to_string())?;
     let gpk: CombinedGPK = serde_json::from_str(&gpk.to_string()).map_err(|e| e.to_string())?;
@@ -65,14 +57,12 @@ pub mod ios {
         msg: *const c_char,
         cred: *const c_char,
         gpk: *const c_char,
-        seed: *const c_char,
     ) -> *mut c_char {
         let msg = unsafe { CStr::from_ptr(msg) }.to_str().unwrap();
         let cred = unsafe { CStr::from_ptr(cred) }.to_str().unwrap();
         let gpk = unsafe { CStr::from_ptr(gpk) }.to_str().unwrap();
-        let seed = unsafe { CStr::from_ptr(seed) }.to_str().unwrap();
 
-        let signature = mobile_sign(msg, cred, gpk, seed);
+        let signature = mobile_sign(msg, cred, gpk);
 
         CString::new(encode(&signature)).unwrap().into_raw()
     }
@@ -147,13 +137,12 @@ mod test {
         let gpk = serde_json::to_string(&gpk).unwrap();
         let usk = serde_json::to_string(&usk).unwrap();
 
-        let seed = String::from(base64::encode("hogehogehogehogehogehogehogehoge"));
 
         println!(
-            r#"sign params: "{}", "{}", "{}", "{}""#,
-            msg, usk, gpk, seed
+            r#"sign params: "{}", "{}", "{}""#,
+            msg, usk, gpk
         );
-        let sig = mobile_sign(&msg, &usk, &gpk, &seed).unwrap();
+        let sig = mobile_sign(&msg, &usk, &gpk).unwrap();
 
         assert_eq!(mobile_verify(&msg, &sig, &gpk).unwrap(), "true".to_string());
         assert_eq!(
@@ -164,7 +153,7 @@ mod test {
 
     #[test]
     fn test_encode_and_decode() {
-        use serde::Deserialize;
+        use serde::{Deserialize, Serialize};
 
         #[derive(Clone, Serialize, Deserialize)]
         struct Hoge {

@@ -28,8 +28,8 @@ public class DistributedBbsModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sign(String msg, String cred, String gpk, String seed, Promise promise) {
-        String signature = rust_sign(msg, cred, gpk, seed);
+    public void sign(String msg, String cred, String gpk, Promise promise) {
+        String signature = rust_sign(msg, cred, gpk);
 
         resultToPromise(signature, promise);
     }
@@ -50,6 +50,6 @@ public class DistributedBbsModule extends ReactContextBaseJavaModule {
     }
 
     private static native String rust_number();
-    private static native String rust_sign(String msg, String cred, String gpk, String seed);
+    private static native String rust_sign(String msg, String cred, String gpk);
     private static native String rust_verify(String msg, String signature, String gpk);
 }
