@@ -12,54 +12,35 @@ use rand::rngs::StdRng;
 use rand::SeedableRng;
 use std::borrow::Borrow;
 
-use serde::de::DeserializeOwned;
-use serde::Serialize;
-
 // FIXME: create our own Result Type
 type MobileResult<T, E> = Result<T, E>;
 
 pub fn to_string<T: Borrow<str>, E: std::fmt::Display>(r: MobileResult<T, E>) -> String {
-        match r {
-            Ok(v) => v.borrow().to_owned(),
-            Err(e) => format!("ERROR: {}", e),
-        }
-}
-
-pub fn encode<T>(point: &T) -> String
-where
-    T: Serialize,
-{
-    let point = rmp_serde::to_vec(&point).expect("rmp encode error");
-    base64::encode(&point)
-}
-
-fn decode<'a, T: DeserializeOwned>(point: &str) -> Result<T, String> {
-    let point = base64::decode(point).or(Err("base64 decode error"))?;
-    let result = rmp_serde::from_read(&*point).or(Err("base64 decode error"))?;
-    Ok(result)
+    match r {
+        Ok(v) => v.borrow().to_owned(),
+        Err(e) => format!("ERROR: {}", e),
+    }
 }
 
 pub fn mobile_sign(msg: &str, cred: &str, gpk: &str, seed: &str) -> MobileResult<String, String> {
-    let seed = base64::decode(seed)
-        .map_err(|e| e.to_string())?;
+    let seed = base64::decode(seed).map_err(|e| e.to_string())?;
 
     let seed = array_ref!(seed, 0, 32);
 
     let mut rng = StdRng::from_seed(*seed);
 
-    let cred: CombinedUSK = decode(&cred.to_string())
-        .map_err(|e| e.to_string())?;
-    let gpk: CombinedGPK = decode(&gpk.to_string())
-        .map_err(|e| e.to_string())?;
+    let cred: CombinedUSK = serde_json::from_str(&cred.to_string()).map_err(|e| e.to_string())?;
+    let gpk: CombinedGPK = serde_json::from_str(&gpk.to_string()).map_err(|e| e.to_string())?;
 
     let signature = distributed_bss::sign(msg.as_bytes(), &cred, &gpk, &mut rng);
 
-    Ok(encode(&signature))
+    let result = serde_json::to_string(&signature).map_err(|e| e.to_string())?;
+    Ok(result)
 }
 
 pub fn mobile_verify(msg: &str, signature: &str, gpk: &str) -> Result<String, String> {
-    let signature: Signature = decode(signature)?;
-    let gpk: CombinedGPK = decode(gpk)?;
+    let signature: Signature = serde_json::from_str(signature).map_err(|e| e.to_string())?;
+    let gpk: CombinedGPK = serde_json::from_str(gpk).map_err(|e| e.to_string())?;
 
     let result = distributed_bss::verify(msg.as_bytes(), &signature, &gpk).is_ok();
     return Ok(result.to_string());
@@ -163,8 +144,8 @@ mod test {
         let msg2 = String::from("piyo");
 
         let usk = CombinedUSK::new(&partials);
-        let gpk = String::from(encode(&gpk));
-        let usk = String::from(encode(&usk));
+        let gpk = serde_json::to_string(&gpk).unwrap();
+        let usk = serde_json::to_string(&usk).unwrap();
 
         let seed = String::from(base64::encode("hogehogehogehogehogehogehogehoge"));
 

@@ -7,7 +7,7 @@ PATH := $(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86_64/bin:$(PAT
 
 BINDINGS_HEADER=target/bindings.h
 
-ANDROID_NDK_HOME=~/Library/Android/sdk/ndk/22.1.7171670
+#ANDROID_NDK_HOME=~/Library/Android/sdk/ndk/22.1.7171670
 
 ANDROID_AARCH64_LINKER=$(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86_64/bin/aarch64-linux-android29-clang
 ANDROID_ARMV7_LINKER=$(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86_64/bin/armv7a-linux-androideabi29-clang
