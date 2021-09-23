@@ -9,8 +9,7 @@ jstring Java_com_matchingapp_DistributedBbsModule_rust_1sign(JNIEnv env,
                                                              JClass,
                                                              JString msg,
                                                              JString cred,
-                                                             JString gpk,
-                                                             JString seed);
+                                                             JString gpk);
 
 jstring Java_com_matchingapp_DistributedBbsModule_rust_1verify(JNIEnv env,
                                                                JClass,
@@ -20,7 +19,7 @@ jstring Java_com_matchingapp_DistributedBbsModule_rust_1verify(JNIEnv env,
 
 jstring Java_com_matchingapp_DistributedBbsModule_rust_1number(JNIEnv env, JClass);
 
-char *sign(const char *msg, const char *cred, const char *gpk, const char *seed);
+char *sign(const char *msg, const char *cred, const char *gpk);
 
 bool verify(const char *msg, const char *signature, const char *gpk);
 
