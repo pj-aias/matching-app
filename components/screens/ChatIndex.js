@@ -66,9 +66,7 @@ const Room = ({room, openRoom}) => {
         borderRadius: 6,
         padding: 20,
       }}
-      onPress={() => {
-        console.log('does not work');
-      }}>
+      onPress={openRoom}>
       <Text
         style={{
           fontSize: 19,
