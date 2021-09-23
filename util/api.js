@@ -33,13 +33,14 @@ export class APIHandler {
         return this;
     }
 
-    withAIASSig(usk, gpk, seed) {
-        const signature = DistributedBbsModule.sign(msg, JSON.stringify(usk), JSON.stringify(gpk));
+    async withAIASSig() {
+        const signer = await AiasStorage.loadAiasSigner(signer);
 
-        this.headers['X-AIAS'] = signature;
+        this.headers['X-AIAS'] = await signer.sign(this.body);
+        this.headers['AIAS-GMs'] = signer.domains;
+
         return this;
     }
-
 
     makeHeaders(headers) {
         return headers
@@ -50,23 +51,26 @@ export class APIHandler {
             : this.headers;
     }
 
-    get(data = {}) {
+    async get(data = {}) {
+        await this.withAIASSig();
         const headers = this.makeHeaders(data.headers);
         console.log(`GET ${this.endpoint}`);
-        return APIHandler.tor.get(this.url, headers);
+        return await APIHandler.tor.get(this.url, headers);
     }
 
-    post(data = {}) {
+    async post(data = {}) {
+        await this.withAIASSig();
         const body = data.body ? JSON.stringify(data.body) : '';
         const headers = this.makeHeaders(data.headers);
         console.log(`POST ${this.endpoint}`);
-        return APIHandler.tor.post(this.url, body, headers);
+        return await APIHandler.tor.post(this.url, body, headers);
     }
 
-    delete(data = {}) {
+    async delete(data = {}) {
+        await this.withAIASSig();
         const body = data.body ? JSON.stringify(data.body) : '';
         const headers = this.makeHeaders(data.headers);
         console.log(`DELETE ${this.endpoint}`);
-        return APIHandler.tor.delete(this.url, body, headers);
+        return await APIHandler.tor.delete(this.url, body, headers);
     }
 }
