@@ -1,8 +1,10 @@
 import axios from 'axios';
 import Tor from 'react-native-tor';
 import { NativeModules } from "react-native";
+import { AiasStorage } from "../aias/Aias";
 
 const { DistributedBbsModule } = NativeModules;
+
 
 export class APIHandler {
     static tor = Tor();
@@ -33,11 +35,16 @@ export class APIHandler {
         return this;
     }
 
-    async withAIASSig() {
+    async withAIASSig(body) {
         const signer = await AiasStorage.loadAiasSigner(signer);
+        const signature = await signer.sign(body);
 
-        this.headers['X-AIAS'] = await signer.sign(this.body);
-        this.headers['AIAS-GMs'] = signer.domains;
+        this.headers['X-AIAS-Signature'] = JSON.stringify(signature);
+
+        // todo: fix
+        this.headers['AIAS-GMs'] = JSON.stringify(signer.domains._W);
+
+        console.log(this.headers)
 
         return this;
     }
@@ -52,23 +59,23 @@ export class APIHandler {
     }
 
     async get(data = {}) {
-        await this.withAIASSig();
         const headers = this.makeHeaders(data.headers);
+        await this.withAIASSig('');
         console.log(`GET ${this.endpoint}`);
         return await APIHandler.tor.get(this.url, headers);
     }
 
     async post(data = {}) {
-        await this.withAIASSig();
         const body = data.body ? JSON.stringify(data.body) : '';
+        await this.withAIASSig(body);
         const headers = this.makeHeaders(data.headers);
         console.log(`POST ${this.endpoint}`);
         return await APIHandler.tor.post(this.url, body, headers);
     }
 
     async delete(data = {}) {
-        await this.withAIASSig();
         const body = data.body ? JSON.stringify(data.body) : '';
+        await this.withAIASSig(body);
         const headers = this.makeHeaders(data.headers);
         console.log(`DELETE ${this.endpoint}`);
         return await APIHandler.tor.delete(this.url, body, headers);
