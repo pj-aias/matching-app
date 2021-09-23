@@ -58,26 +58,37 @@ export class APIHandler {
             : this.headers;
     }
 
-    async get(data = {}) {
+    async request(data = {}, method) {
+        const body = data.body ? JSON.stringify(data.body) : '';
+
+        await this.withAIASSig(body);
         const headers = this.makeHeaders(data.headers);
-        await this.withAIASSig('');
+
+        try {
+            const res = await method(this.url, body, headers);
+            await APIHandler.tor.stopIfRunning();
+        } catch (e) {
+            await APIHandler.tor.stopIfRunning();
+            throw e;
+        }
+
+        return res;
+    }
+
+    async get(data = {}) {
         console.log(`GET ${this.endpoint}`);
-        return await APIHandler.tor.get(this.url, headers);
+        return await this.request(data, async (url, _, headers) => {
+            return await APIHandler.tor.get(url, headers);
+        })
     }
 
     async post(data = {}) {
-        const body = data.body ? JSON.stringify(data.body) : '';
-        await this.withAIASSig(body);
-        const headers = this.makeHeaders(data.headers);
         console.log(`POST ${this.endpoint}`);
-        return await APIHandler.tor.post(this.url, body, headers);
+        return await this.request(data, APIHandler.tor.post)
     }
 
     async delete(data = {}) {
-        const body = data.body ? JSON.stringify(data.body) : '';
-        await this.withAIASSig(body);
-        const headers = this.makeHeaders(data.headers);
         console.log(`DELETE ${this.endpoint}`);
-        return await APIHandler.tor.delete(this.url, body, headers);
+        return await this.request(data, APIHandler.tor.delete)
     }
 }
