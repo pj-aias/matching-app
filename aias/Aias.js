@@ -1,4 +1,4 @@
-import RNSecureStorage from "rn-secure-storage";
+import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 import { NativeModules } from "react-native";
 
 const { DistributedBbsModule } = NativeModules;
@@ -9,7 +9,6 @@ class AiasSigner {
         this.gpk = gpk;
         this.domains = domains;
 
-        console.log("usk: ", usk);
         console.log("domains: ", domains);
     }
 
@@ -20,9 +19,15 @@ class AiasSigner {
 
 
 const saveAiasSigner = async ({ usk, gpk, domains }) => {
-    await RNSecureStorage.set("usk", JSON.stringify(usk));
-    await RNSecureStorage.set("gpk", JSON.stringify(gpk));
-    await RNSecureStorage.set("domains", JSON.stringify(domains));
+    const stringfy_and_save = async (name, data) => {
+        await RNSecureStorage.set(name, JSON.stringify(data), {
+            accessible: ACCESSIBLE.WHEN_UNLOCKED,
+        });
+    }
+
+    await stringfy_and_save("usk", usk);
+    await stringfy_and_save("gpk", gpk);
+    await stringfy_and_save("domains", domains);
 }
 
 const loadAiasSigner = async () => {
