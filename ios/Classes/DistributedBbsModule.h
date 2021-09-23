@@ -5,20 +5,20 @@
 
 int32_t rust_number(void);
 
-jstring Java_com_matchingapp_DistributedBbsModule_sign(JNIEnv env,
-                                                       JClass,
-                                                       JString msg,
-                                                       JString cred,
-                                                       JString gpk,
-                                                       JString seed);
+jstring Java_com_matchingapp_DistributedBbsModule_rust_1sign(JNIEnv env,
+                                                             JClass,
+                                                             JString msg,
+                                                             JString cred,
+                                                             JString gpk,
+                                                             JString seed);
 
-bool Java_com_matchingapp_DistributedBbsModule_verify(JNIEnv env,
-                                                      JClass,
-                                                      JString msg,
-                                                      JString signature,
-                                                      JString gpk);
+jstring Java_com_matchingapp_DistributedBbsModule_rust_1verify(JNIEnv env,
+                                                               JClass,
+                                                               JString msg,
+                                                               JString signature,
+                                                               JString gpk);
 
-int32_t Java_com_matchingapp_DistributedBbsModule_rust_number(JNIEnv, JClass);
+jstring Java_com_matchingapp_DistributedBbsModule_rust_1number(JNIEnv env, JClass);
 
 char *sign(const char *msg, const char *cred, const char *gpk, const char *seed);
 
