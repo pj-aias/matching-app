@@ -1,20 +1,20 @@
 import 'react-native-gesture-handler';
+
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Text } from 'react-native';
 
-
 import Match from './components/screens/Matching/Match';
 import Top from './components/screens/Auth/Top';
 import Signin from './components/screens/Auth/SignIn';
 import Signup from './components/screens/Auth/Signup';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Chat from './components/screens/Chat';
 import Start from './components/screens/Matching/Start';
 import ChatIndex from './components/screens/ChatIndex';
 import TestTorScreen from './components/screens/TestTorScreen';
-import { APIHandler } from './util/api';
+import {APIHandler} from './util/api';
 
 const theme = {
   headerStyle: {
