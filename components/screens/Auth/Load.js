@@ -18,6 +18,11 @@ const Load = ({ navigation, route }) => {
 
         const signature = await signer.sign(msg);
         setSignature(signature);
+
+        return () => {
+            setSignature("");
+            setVerifyResult(false);
+        }
     }, []);
 
     // useEffect(() => {

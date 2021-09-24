@@ -28,6 +28,10 @@ const ChatIndex = ({ navigation }) => {
 
     console.log("chat index res:", res);
     setRooms(res.json.chatrooms);
+
+    return () => {
+      setRooms([]);
+    }
   }, []);
 
   // Returns callback function to open a given chat
