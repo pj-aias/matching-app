@@ -8,7 +8,7 @@ export const getUserNames = chatroom =>
   chatroom.users ? chatroom.users.map(u => u.username).join(', ') : '';
 
 // sync messages every 10 seconds
-const syncInterval = 10 * 1000;
+const syncInterval = 60 * 1000;
 
 const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
@@ -74,7 +74,7 @@ const Chat = ({ route, navigation }) => {
   }, [roomId, title]);
 
   const messagesView = messages.map(m => (
-    <ChatCard content={m.content} isCurrentUser={m.user.id === me.id} />
+    <ChatCard content={m.content} isCurrentUser={m.user.id === me.id} key={m.id} />
   ));
   const usernames = getUserNames(room);
 
