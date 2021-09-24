@@ -26,6 +26,10 @@ const Top = ({ navigation, route }) => {
       Linking.openURL(URL);
     }
 
+    return () => {
+      setSignature("");
+      setVerifyResult(false);
+    }
   }, []);
 
   // useEffect(() => {
