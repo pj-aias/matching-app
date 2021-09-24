@@ -4,6 +4,7 @@ import Tor from 'react-native-tor';
 export class APIHandler {
     static tor = Tor();
     static authToken = '';
+    static me = null;
 
     static scheme = 'http';
     static host = 'yjqictkblqijcsldpwvkd2addy2kc7edpffeg64lhynruy3kxl7s5zid.onion';
@@ -15,6 +16,14 @@ export class APIHandler {
 
     static setAuthToken(tokenString) {
         APIHandler.authToken = tokenString;
+    }
+
+    static setUser(user) {
+        APIHandler.me = user;
+    }
+
+    static whoami() {
+        return this.me;
     }
 
     constructor(endpoint) {
