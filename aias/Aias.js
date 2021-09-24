@@ -8,26 +8,32 @@ class AiasSigner {
         this.usk = usk;
         this.gpk = gpk;
         this.domains = domains;
-
-        console.log("domains: ", domains);
     }
 
     async sign(msg) {
-        return await DistributedBbsModule.sign(msg, JSON.stringify(this.usk), JSON.stringify(this.gpk));
+        console.log("gpk: ", JSON.stringify(this.gpk));
+        console.log("msg: ", JSON.stringify(msg));
+        const res = await DistributedBbsModule.sign(msg, JSON.stringify(this.usk), JSON.stringify(this.gpk));
+
+        console.log("signature: ", JSON.stringify(res));
+
+        return res
     }
 }
 
 
-const saveAiasSigner = async ({ usk, gpk, domains }) => {
+const saveAiasSigner = async (signer) => {
     const stringfy_and_save = async (name, data) => {
         await RNSecureStorage.set(name, JSON.stringify(data), {
             accessible: ACCESSIBLE.WHEN_UNLOCKED,
         });
     }
 
-    await stringfy_and_save("usk", usk);
-    await stringfy_and_save("gpk", gpk);
-    await stringfy_and_save("domains", domains);
+    console.log("signer: ", signer)
+
+    await stringfy_and_save("usk", signer.usk);
+    await stringfy_and_save("gpk", signer.gpk);
+    await stringfy_and_save("domains", signer.domains);
 }
 
 const loadAiasSigner = async () => {

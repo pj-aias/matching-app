@@ -1,11 +1,13 @@
 import 'react-native-gesture-handler';
+
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-const Stack = createStackNavigator();
+import { Text } from 'react-native';
 
 import Match from './components/screens/Matching/Match';
 import Top from './components/screens/Auth/Top';
+import Load from './components/screens/Auth/Load';
 import Signin from './components/screens/Auth/SignIn';
 import Signup from './components/screens/Auth/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -29,7 +31,7 @@ const Stack = createStackNavigator();
 
 const config = {
   screens: {
-    TOP: {
+    Load: {
       path: 'result',
       parse: {
         result: (data) => `?result=${data}`,
@@ -55,30 +57,63 @@ const App = () => {
   // }, []);
 
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="TOP" component={Top} options={theme} />
-          <Stack.Screen name="Signup" component={Signup} options={theme} />
-          <Stack.Screen name="Signin" component={Signin} options={theme} />
-          <Stack.Screen name="Start" component={Start} options={theme} />
-          <Stack.Screen name="Match" component={Match} options={theme} />
-          <Stack.Screen name="Chat" component={Chat} options={theme} />
-          <Stack.Screen
-            name="ChatIndex"
-            component={ChatIndex}
-            options={theme}
-          />
-          <Stack.Screen
-            name="TestTor"
-            component={TestTorScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+    // <SafeAreaProvider>
+    <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="TOP"
+          component={Top}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="Load"
+          component={Load}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={theme}
+        />
+        <Stack.Screen
+          name="Signin"
+          component={Signin}
+          options={theme}
+        />
+        <Stack.Screen
+          name="Start"
+          component={Start}
+          options={theme}
+        />
+        <Stack.Screen
+          name="Match"
+          component={Match}
+          options={theme}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
+          options={theme}
+        />
+        <Stack.Screen
+          name="ChatIndex"
+          component={ChatIndex}
+          options={theme}
+        />
+        <Stack.Screen
+          name="TestTor"
+          component={TestTorScreen}
+          options={{
+            headerShown: false
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+    // </SafeAreaProvider>
   );
 };
 

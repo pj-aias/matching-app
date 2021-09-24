@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {Text, View, Button, TextInput} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {APIHandler} from '../../util/api';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { APIHandler } from '../../util/api';
 import ChatCard from '../UIParts/ChatCard';
 
 export const getUserNames = chatroom =>
@@ -10,13 +10,16 @@ export const getUserNames = chatroom =>
 // sync messages every 10 seconds
 const syncInterval = 10 * 1000;
 
-const Chat = ({route, navigation}) => {
+const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
   // Currently API server doesn't send users, so it will undefined
   const [room, setRoom] = useState({});
   const [text, setText] = useState('');
+  const [title, setTitle] = useState('Loading...');
 
-  const {roomId} = route.params;
+  const { roomId } = route.params;
+
+  const me = APIHandler.whoami();
 
   const syncMessages = () => {
     new APIHandler('/message/' + roomId)
@@ -27,6 +30,9 @@ const Chat = ({route, navigation}) => {
         console.log(res);
         setRoom(res.json.chatroom);
         setMessages(res.json.messages);
+
+        const other = res.json.chatroom.users.filter((u) => u.id !== me.id)[0];
+        setTitle(`${other.username} さんとのチャット`);
       })
       .catch(console.log);
   };
@@ -36,7 +42,7 @@ const Chat = ({route, navigation}) => {
     new APIHandler(`/message/${roomId}`)
       .withAuth()
       .post({
-        body: {content},
+        body: { content },
       })
       .then(res => {
         console.log(res);
@@ -53,22 +59,28 @@ const Chat = ({route, navigation}) => {
   useEffect(() => {
     navigation.setOptions({
       headerTitleAlign: 'center',
-      headerTitle: {usernames} + 'さんとのチャット',
+      headerTitle: { usernames } + 'さんとのチャット',
     });
+
     const timer = setInterval(syncMessages, syncInterval);
     return () => clearInterval(timer);
   }, [roomId]);
 
-  const me = APIHandler.whoami();
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitleAlign: 'center',
+      headerTitle: title,
+    });
+  }, [roomId, title]);
 
   const messagesView = messages.map(m => (
-    <ChatCard content={m.content} isCurrentUser={ m.user.id === me.id } />
+    <ChatCard content={m.content} isCurrentUser={m.user.id === me.id} />
   ));
   const usernames = getUserNames(room);
 
   return (
-    <View style={{display: 'flex', flex: 1}}>
-      <ScrollView style={{flex: 1}}>{messagesView}</ScrollView>
+    <View style={{ display: 'flex', flex: 1 }}>
+      <ScrollView style={{ flex: 1 }}>{messagesView}</ScrollView>
       <Button title="送信する" onPress={() => sendMessage(text)} />
       <AutoGrowTextInput
         onChangeText={setText}
@@ -82,7 +94,8 @@ const Chat = ({route, navigation}) => {
 const AutoGrowTextInput = props => {
   const [height, setHeight] = useState(0);
 
-  const textHeight = Math.min(35 * 5, Math.max(25, height));
+  const fontHeight = 50;
+  const textHeight = Math.min(fontHeight, Math.max(fontHeight * 5, height));
   return (
     <TextInput
       {...props}
@@ -90,9 +103,10 @@ const AutoGrowTextInput = props => {
       onContentSizeChange={event => {
         setHeight(event.nativeEvent.contentSize.height);
       }}
-      style={{height: textHeight}}
+      style={{ height: textHeight }}
     />
   );
 };
+
 
 export default Chat;
