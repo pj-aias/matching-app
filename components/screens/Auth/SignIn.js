@@ -1,38 +1,40 @@
-import React, {useState} from 'react';
-import {View, Text, TextInput} from 'react-native';
-import {Formik} from 'formik';
+import React, { useState } from 'react';
+import { View, Text, TextInput } from 'react-native';
+import { Formik } from 'formik';
 import authSchema from '../../../util/yup.js';
-import {APIHandler} from '../../../util/api.js';
-import {Button} from 'react-native-elements';
+import { APIHandler } from '../../../util/api.js';
+import { Button } from 'react-native-elements';
 
-const Signin = ({navigation}) => {
+const Signin = ({ navigation }) => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (name, password) => {
     console.log(name, password);
 
-    const result = new APIHandler('/login')
-      .post({
-        body: {
-          username: name,
-          password: password,
-          signature: 'test',
-        },
-      })
-      .then(res => {
-        console.log(res);
-        APIHandler.setAuthToken(res.json.token);
-        APIHandler.setUser(res.json.user);
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Start'}],
+    try {
+      const res = await new APIHandler('/login')
+        .post({
+          body: {
+            username: name,
+            password: password,
+            signature: 'test',
+          },
         });
-      })
-      .catch(err => {
-        console.log(err.message);
-        setError(err.message);
+
+      console.log(res);
+      APIHandler.setAuthToken(res.json.token);
+      APIHandler.setUser(res.json.user);
+
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Start' }],
       });
-  };
+
+    } catch (err) {
+      console.log(err.message);
+      setError(err.message);
+    }
+  }
 
   return (
     <View
@@ -40,7 +42,7 @@ const Signin = ({navigation}) => {
         padding: 10,
       }}>
       <Formik
-        initialValues={{name: '', password: ''}}
+        initialValues={{ name: '', password: '' }}
         validationSchema={authSchema}
         onSubmit={values => handleSubmit(values.name, values.password)}>
         {({

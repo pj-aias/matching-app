@@ -10,7 +10,6 @@ pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_rust_1sign(
     msg: JString,
     cred: JString,
     gpk: JString,
-    seed: JString,
 ) -> jstring {
     let msg: String = env
         .get_string(msg)
@@ -27,12 +26,7 @@ pub unsafe extern "C" fn Java_com_matchingapp_DistributedBbsModule_rust_1sign(
         .expect("Couldn't get java string!")
         .into();
 
-    let seed: String = env
-        .get_string(seed)
-        .expect("Couldn't get java string!")
-        .into();
-
-    let signature = to_string(mobile_sign(&msg, &cred, &gpk, &seed));
+    let signature = to_string(mobile_sign(&msg, &cred, &gpk));
 
     let signature = env
         .new_string(signature)

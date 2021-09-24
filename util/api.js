@@ -1,5 +1,10 @@
 import axios from 'axios';
 import Tor from 'react-native-tor';
+import { NativeModules } from "react-native";
+import { AiasStorage } from "../aias/Aias";
+
+const { DistributedBbsModule } = NativeModules;
+
 
 export class APIHandler {
     static tor = Tor();
@@ -39,6 +44,20 @@ export class APIHandler {
         return this;
     }
 
+    async withAIASSig(body) {
+        const signer = await AiasStorage.loadAiasSigner(signer);
+        const signature = await signer.sign(body);
+
+        this.headers['X-AIAS-Signature'] = JSON.stringify(signature);
+
+        // todo: fix
+        this.headers['AIAS-GMs'] = JSON.stringify(signer.domains._W);
+
+        console.log(this.headers)
+
+        return this;
+    }
+
     makeHeaders(headers) {
         return headers
             ? {
@@ -48,23 +67,37 @@ export class APIHandler {
             : this.headers;
     }
 
-    get(data = {}) {
+    async request(data = {}, method) {
+        const body = data.body ? JSON.stringify(data.body) : '';
+
+        await this.withAIASSig(body);
         const headers = this.makeHeaders(data.headers);
+
+        try {
+            const res = await method(this.url, body, headers);
+            await APIHandler.tor.stopIfRunning();
+        } catch (e) {
+            await APIHandler.tor.stopIfRunning();
+            throw e;
+        }
+
+        return res;
+    }
+
+    async get(data = {}) {
         console.log(`GET ${this.endpoint}`);
-        return APIHandler.tor.get(this.url, headers);
+        return await this.request(data, async (url, _, headers) => {
+            return await APIHandler.tor.get(url, headers);
+        })
     }
 
-    post(data = {}) {
-        const body = data.body ? JSON.stringify(data.body) : '';
-        const headers = this.makeHeaders(data.headers);
+    async post(data = {}) {
         console.log(`POST ${this.endpoint}`);
-        return APIHandler.tor.post(this.url, body, headers);
+        return await this.request(data, APIHandler.tor.post)
     }
 
-    delete(data = {}) {
-        const body = data.body ? JSON.stringify(data.body) : '';
-        const headers = this.makeHeaders(data.headers);
+    async delete(data = {}) {
         console.log(`DELETE ${this.endpoint}`);
-        return APIHandler.tor.delete(this.url, body, headers);
+        return await this.request(data, APIHandler.tor.delete)
     }
 }
