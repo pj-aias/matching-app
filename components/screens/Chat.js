@@ -42,7 +42,10 @@ const Chat = ({ route, navigation }) => {
     const other = res.json.chatroom.users.filter((u) => u.id !== me.id)[0];
     setTitle(`${other.username} さんとのチャット`);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      APIHandler.stopAll();
+    }
   }
 
   const sendMessage = async content => {

@@ -15,6 +15,7 @@ export class APIHandler {
     static scheme = 'http';
     static host = 'yjqictkblqijcsldpwvkd2addy2kc7edpffeg64lhynruy3kxl7s5zid.onion';
     static port = 80;
+    static stopAll = false;
 
     static buildApiUrl(path, host = APIHandler.host) {
         return `${APIHandler.scheme}://${host}:${APIHandler.port}${path}`;
@@ -32,12 +33,17 @@ export class APIHandler {
         return this.me;
     }
 
+    static stopAll() {
+        this.stopAll = true;
+    }
+
     constructor(endpoint) {
         this.authToken = '';
         this.url = APIHandler.buildApiUrl(endpoint);
         this.endpoint = endpoint
         this.headers = {};
         this.wait = false;
+        APIHandler.stopAll = false;
     }
 
     withAuth() {
@@ -81,7 +87,7 @@ export class APIHandler {
 
         if (APIHandler.wait) {
             let data = "";
-            while (APIHandler.tor.getDaemonStatus() === 'NOTINIT') {
+            while (APIHandler.tor.getDaemonStatus() === 'NOTINIT' && !stopAll) {
                 sleep(3);
 
                 try {
