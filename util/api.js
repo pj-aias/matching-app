@@ -113,7 +113,7 @@ export class APIHandler {
         APIHandler.lock = false;
     }
 
-    request(req) {
+    request(...req) {
         return new Promise((resolve, reject) => {
             if (!APIHandler.q.enq({ req, resolve, reject })) {
                 reject("queue is full");
