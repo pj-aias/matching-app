@@ -15,19 +15,19 @@ const Top = ({ navigation, route }) => {
   useEffect(async () => {
     let signer;
 
-    try {
+    console.log(route.params);
+
+    if (typeof route.params !== 'undefined') {
       signer = generateAiasSignerFromRoute(route);
       await AiasStorage.saveAiasSigner(signer);
-    } catch (e) {
-      console.log(e);
-    }
+    } else {
+      try {
+        signer = await AiasStorage.loadAiasSigner(signer);
+      } catch (e) {
+        console.log(e)
+        Linking.openURL(URL);
+      }
 
-    try {
-      signer = await AiasStorage.loadAiasSigner(signer);
-    } catch (e) {
-      console.log(e)
-      Linking.openURL(URL);
-      return;
     }
 
     const signature = await signer.sign(msg);

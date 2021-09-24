@@ -8,12 +8,16 @@ class AiasSigner {
         this.usk = usk;
         this.gpk = gpk;
         this.domains = domains;
-
-        console.log("domains: ", domains);
     }
 
     async sign(msg) {
-        return await DistributedBbsModule.sign(msg, JSON.stringify(this.usk), JSON.stringify(this.gpk));
+        console.log("gpk: ", JSON.stringify(this.gpk));
+        console.log("msg: ", JSON.stringify(msg));
+        const res = await DistributedBbsModule.sign(msg, JSON.stringify(this.usk), JSON.stringify(this.gpk));
+
+        console.log("signature: ", JSON.stringify(res));
+
+        return res
     }
 }
 

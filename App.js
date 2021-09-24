@@ -56,56 +56,56 @@ const App = () => {
   // }, []);
 
   return (
-    <SafeAreaProvider>
-      <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="TOP"
-            component={Top}
-            options={{
-              headerShown: false
-            }}
-          />
-          <Stack.Screen
-            name="Signup"
-            component={Signup}
-            options={theme}
-          />
-          <Stack.Screen
-            name="Signin"
-            component={Signin}
-            options={theme}
-          />
-          <Stack.Screen
-            name="Start"
-            component={Start}
-            options={theme}
-          />
-          <Stack.Screen
-            name="Match"
-            component={Match}
-            options={theme}
-          />
-          <Stack.Screen
-            name="Chat"
-            component={Chat}
-            options={theme}
-          />
-          <Stack.Screen
-            name="ChatIndex"
-            component={ChatIndex}
-            options={theme}
-          />
-          <Stack.Screen
-            name="TestTor"
-            component={TestTorScreen}
-            options={{
-              headerShown: false
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+    // <SafeAreaProvider>
+    <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="TOP"
+          component={Top}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={theme}
+        />
+        <Stack.Screen
+          name="Signin"
+          component={Signin}
+          options={theme}
+        />
+        <Stack.Screen
+          name="Start"
+          component={Start}
+          options={theme}
+        />
+        <Stack.Screen
+          name="Match"
+          component={Match}
+          options={theme}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
+          options={theme}
+        />
+        <Stack.Screen
+          name="ChatIndex"
+          component={ChatIndex}
+          options={theme}
+        />
+        <Stack.Screen
+          name="TestTor"
+          component={TestTorScreen}
+          options={{
+            headerShown: false
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+    // </SafeAreaProvider>
   );
 };
 
