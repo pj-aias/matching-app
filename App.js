@@ -7,6 +7,7 @@ import { Text } from 'react-native';
 
 import Match from './components/screens/Matching/Match';
 import Top from './components/screens/Auth/Top';
+import Load from './components/screens/Auth/Load';
 import Signin from './components/screens/Auth/SignIn';
 import Signup from './components/screens/Auth/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -30,7 +31,7 @@ const Stack = createStackNavigator();
 
 const config = {
   screens: {
-    TOP: {
+    Load: {
       path: 'result',
       parse: {
         result: (data) => `?result=${data}`,
@@ -62,6 +63,13 @@ const App = () => {
         <Stack.Screen
           name="TOP"
           component={Top}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="Load"
+          component={Load}
           options={{
             headerShown: false
           }}

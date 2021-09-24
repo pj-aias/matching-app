@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Text, Button } from "react-native-elements";
-import { NativeModules, SafeAreaView, View, Linking } from "react-native";
+import { NativeModules, SafeAreaView, View, Linking, Alert } from "react-native";
 import { generateAiasSignerFromRoute, AiasStorage } from "../../../aias/Aias";
 
 
@@ -17,21 +17,15 @@ const Top = ({ navigation, route }) => {
 
     console.log(route.params);
 
-    if (typeof route.params !== 'undefined') {
-      signer = generateAiasSignerFromRoute(route);
-      await AiasStorage.saveAiasSigner(signer);
-    } else {
-      try {
-        signer = await AiasStorage.loadAiasSigner(signer);
-      } catch (e) {
-        console.log(e)
-        Linking.openURL(URL);
-      }
-
+    try {
+      signer = await AiasStorage.loadAiasSigner(signer);
+      const signature = await signer.sign(msg);
+      setSignature(signature);
+    } catch (e) {
+      console.log(e)
+      Linking.openURL(URL);
     }
 
-    const signature = await signer.sign(msg);
-    setSignature(signature);
   }, []);
 
   // useEffect(() => {
@@ -58,12 +52,12 @@ const Top = ({ navigation, route }) => {
           onPress={() => { navigation.navigate('Signup') }}
         />
       </View>
-      {/* <View>
+      <View>
         <Text>{signatureText}</Text>
       </View>
       <View>
         <Text>{verifyResultText}</Text>
-      </View> */}
+      </View>
     </SafeAreaView>
   );
 }
