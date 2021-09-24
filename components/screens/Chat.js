@@ -15,8 +15,11 @@ const Chat = ({ route, navigation }) => {
   // Currently API server doesn't send users, so it will undefined
   const [room, setRoom] = useState({});
   const [text, setText] = useState('');
+  const [title, setTitle] = useState('Loading...');
 
   const { roomId } = route.params;
+
+  const me = APIHandler.whoami();
 
   const syncMessages = () => {
     new APIHandler('/message/' + roomId)
@@ -27,6 +30,9 @@ const Chat = ({ route, navigation }) => {
         console.log(res);
         setRoom(res.json.chatroom);
         setMessages(res.json.messages);
+
+        const other = res.json.chatroom.users.filter((u) => u.id !== me.id)[0];
+        setTitle(`${other.username} さんとのチャット`);
       })
       .catch(console.log);
   };
@@ -55,12 +61,20 @@ const Chat = ({ route, navigation }) => {
       headerTitleAlign: 'center',
       headerTitle: { usernames } + 'さんとのチャット',
     });
+
     const timer = setInterval(syncMessages, syncInterval);
     return () => clearInterval(timer);
   }, [roomId]);
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitleAlign: 'center',
+      headerTitle: title,
+    });
+  }, [roomId, title]);
+
   const messagesView = messages.map(m => (
-    <ChatCard content={m.content} isCurrentUser={false} />
+    <ChatCard content={m.content} isCurrentUser={m.user.id === me.id} />
   ));
   const usernames = getUserNames(room);
 
