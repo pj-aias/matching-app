@@ -6,9 +6,8 @@ import { getUserNames } from './Chat.js';
 
 const ChatIndex = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
-  const [otherUser, setOtherUser] = useState(null);
 
-  const me = APIHandler.whoami();
+  // const me = APIHandler.whoami();
 
   // Get messages from API after render (effect), and store them to variable if succeeded
   useEffect(() => {
@@ -23,9 +22,6 @@ const ChatIndex = ({ navigation }) => {
         console.log('get chat index');
         console.log(res);
         setRooms(res.json.chatrooms);
-
-        const user = res.json.chatroom.users.filter((u) => u.id !== me.id)[0];
-        setOtherUser(other)
       })
       .catch(console.log);
   }, []);
@@ -47,7 +43,9 @@ const ChatIndex = ({ navigation }) => {
 };
 
 const Room = ({ room, openRoom }) => {
-  const usernames = getUserNames(room);
+  const me = { id: 1 };
+  const otherUser = room.users.filter((u) => u.id !== me.id)[0];
+  console.log("hoge: ", otherUser);
 
   return (
     <TouchableOpacity

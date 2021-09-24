@@ -52,12 +52,12 @@ const Top = ({ navigation, route }) => {
           onPress={() => { navigation.navigate('Signup') }}
         />
       </View>
-      <View>
+      {/* <View>
         <Text>{signatureText}</Text>
       </View>
       <View>
         <Text>{verifyResultText}</Text>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 }
