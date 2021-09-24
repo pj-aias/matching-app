@@ -5,13 +5,6 @@ import { AiasStorage } from "../aias/Aias";
 
 const { DistributedBbsModule } = NativeModules;
 
-class TorWorker {
-    constructor() {
-        this.lock = false;
-        this.tor = Tor()
-    }
-}
-
 class LingQueue {
     constructor(maxLen = 50) {
         this.maxLen = maxLen;
@@ -34,7 +27,7 @@ class LingQueue {
 
     deq() {
         if (this.count < 1) {
-            return;
+            return null;
         }
 
         const elem = this.buff[this.head]
@@ -43,11 +36,15 @@ class LingQueue {
 
         return elem;
     }
+
+    hasAny() {
+        this.count >= 1;
+    }
 }
 
 export class APIHandler {
     static pool = [new TorWorker(), new TorWorker(), new TorWorker()];
-    static que = [];
+    static q = new LingQueue();
     static authToken = '';
     static me = null;
 
@@ -71,10 +68,6 @@ export class APIHandler {
 
     static whoami() {
         return this.me;
-    }
-
-    processNext() {
-        //
     }
 
     constructor(endpoint) {
@@ -104,6 +97,32 @@ export class APIHandler {
         return this;
     }
 
+    processNext() {
+        if (APIHandler.lock) {
+            return;
+        }
+
+        APIHandler.lock = true;
+
+        while (!APIHandler.q.hasAny) {
+            const { req, resolve, reject } = APIHandler.q.deq();
+
+            this.send(...req).then(resolve).catch(reject);
+        }
+
+        APIHandler.lock = false;
+    }
+
+    request(req) {
+        return new Promise((resolve, reject) => {
+            if (!APIHandler.q.enq({ req, resolve, reject })) {
+                reject("queue is full");
+            }
+
+            this.processNext();
+        })
+    }
+
     makeHeaders(headers) {
         return headers
             ? {
@@ -113,13 +132,7 @@ export class APIHandler {
             : this.headers;
     }
 
-    async waitUntilFree() {
-        while (APIHandler.lock) {
-
-        }
-    }
-
-    async request(data = {}, method) {
+    async send(data = {}, method) {
         const body = data.body ? JSON.stringify(data.body) : '';
 
         await this.withAIASSig(body);
