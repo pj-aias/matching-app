@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { APIHandler } from '../../util/api';
 import ChatCard from '../UIParts/ChatCard';
@@ -18,6 +18,7 @@ const Chat = ({ route, navigation }) => {
   const [title, setTitle] = useState('Loading...');
 
   const { roomId } = route.params;
+
   const me = APIHandler.whoami();
 
   const syncMessages = () => {
@@ -56,6 +57,11 @@ const Chat = ({ route, navigation }) => {
 
   // Sync messages periodicaly
   useEffect(() => {
+    navigation.setOptions({
+      headerTitleAlign: 'center',
+      headerTitle: { usernames } + 'さんとのチャット',
+    });
+
     const timer = setInterval(syncMessages, syncInterval);
     return () => clearInterval(timer);
   }, [roomId]);
@@ -88,7 +94,8 @@ const Chat = ({ route, navigation }) => {
 const AutoGrowTextInput = props => {
   const [height, setHeight] = useState(0);
 
-  const textHeight = Math.min(35 * 5, Math.max(25, height));
+  const fontHeight = 50;
+  const textHeight = Math.min(fontHeight, Math.max(fontHeight * 5, height));
   return (
     <TextInput
       {...props}
@@ -100,5 +107,6 @@ const AutoGrowTextInput = props => {
     />
   );
 };
+
 
 export default Chat;

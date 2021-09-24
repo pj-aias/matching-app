@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Text, Button } from "react-native-elements";
-import { NativeModules, SafeAreaView, View, Linking } from "react-native";
+import { NativeModules, SafeAreaView, View, Linking, Alert } from "react-native";
 import { generateAiasSignerFromRoute, AiasStorage } from "../../../aias/Aias";
 
 
@@ -15,23 +15,17 @@ const Top = ({ navigation, route }) => {
   useEffect(async () => {
     let signer;
 
-    try {
-      signer = generateAiasSignerFromRoute(route);
-      await AiasStorage.saveAiasSigner(signer);
-    } catch (e) {
-      console.log(e);
-    }
+    console.log(route.params);
 
     try {
       signer = await AiasStorage.loadAiasSigner(signer);
+      const signature = await signer.sign(msg);
+      setSignature(signature);
     } catch (e) {
       console.log(e)
       Linking.openURL(URL);
-      return;
     }
 
-    const signature = await signer.sign(msg);
-    setSignature(signature);
   }, []);
 
   // useEffect(() => {

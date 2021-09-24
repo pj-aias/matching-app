@@ -76,12 +76,11 @@ export class APIHandler {
         try {
             const res = await method(this.url, body, headers);
             await APIHandler.tor.stopIfRunning();
+            return res;
         } catch (e) {
             await APIHandler.tor.stopIfRunning();
             throw e;
         }
-
-        return res;
     }
 
     async get(data = {}) {
