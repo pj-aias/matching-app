@@ -3,19 +3,28 @@
 buildscript {
     ext {
         buildToolsVersion = "30.0.2"
-        minSdkVersion = 21
+        minSdkVersion = 26
         compileSdkVersion = 30
         targetSdkVersion = 30
         ndkVersion = "20.1.5948944"
+        kotlinVersion = "1.5.30"
+        react = [
+            nodeExecutableAndArgs:  ["/usr/local/bin/node"]
+        ]
     }
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.2.1")
+        classpath("com.android.tools.build:gradle:4.2.2")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath 'org.mozilla.rust-android-gradle:plugin:0.9.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${project.ext.kotlinVersion}"
     }
 }
 
@@ -36,3 +45,4 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
     }
 }
+
