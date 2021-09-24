@@ -82,6 +82,12 @@ const Chat = ({ route, navigation }) => {
       headerTitleAlign: 'center',
       headerTitle: title,
     });
+
+    return () => {
+      setRoom({});
+      setText({});
+      setTitle({});
+    }
   }, [roomId, title]);
 
   const messagesView = messages.map(m => (
