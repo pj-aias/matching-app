@@ -22,6 +22,7 @@ const Signin = ({navigation}) => {
       .then(res => {
         console.log(res);
         APIHandler.setAuthToken(res.json.token);
+        APIHandler.setUser(res.json.user);
         navigation.reset({
           index: 0,
           routes: [{name: 'Start'}],
