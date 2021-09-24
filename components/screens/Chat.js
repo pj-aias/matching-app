@@ -20,36 +20,45 @@ const Chat = ({ route, navigation }) => {
   const { roomId } = route.params;
   const me = APIHandler.whoami();
 
-  const syncMessages = () => {
-    new APIHandler('/message/' + roomId)
-      .withAuth()
-      .get()
-      .then(res => {
-        console.log('GET /message');
-        console.log(res);
-        setRoom(res.json.chatroom);
-        setMessages(res.json.messages);
-        setTimeout(sendMessage, syncInterval);
+  const syncMessages = async () => {
+    let res;
 
-        const other = res.json.chatroom.users.filter((u) => u.id !== me.id)[0];
-        setTitle(`${other.username} さんとのチャット`);
-      })
-      .catch(console.log);
-  };
+    try {
+      res = await new APIHandler('/message/' + roomId)
+        .withAuth()
+        .get();
+    } catch (e) {
+      console.log(e);
+      return;
+    }
 
-  const sendMessage = content => {
+    console.log('GET /message');
+    console.log(res);
+    setRoom(res.json.chatroom);
+    setMessages(res.json.messages);
+    setTimeout(sendMessage, syncInterval);
+
+    const other = res.json.chatroom.users.filter((u) => u.id !== me.id)[0];
+    setTitle(`${other.username} さんとのチャット`);
+  }
+
+  const sendMessage = async content => {
     console.log(`send message "${content}"`);
-    new APIHandler(`/message/${roomId}`)
-      .withAuth()
-      .post({
-        body: { content },
-      })
-      .then(res => {
-        console.log(res);
-        syncMessages();
-        setText('');
-      })
-      .catch(console.log);
+    let res;
+    try {
+      res = await new APIHandler(`/message/${roomId}`)
+        .withAuth()
+        .post({
+          body: { content },
+        });
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+
+    console.log(res);
+    syncMessages();
+    setText('');
   };
 
   // Get messages from API after render (effect), and store them to variable if succeeded

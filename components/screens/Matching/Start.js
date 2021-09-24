@@ -6,17 +6,21 @@ import { APIHandler } from '../../../util/api.js'
 const Start = ({ navigation }) => {
 
   const handleSubmit = async () => {
-    const result = await new APIHandler('/matching')
-      .withAuth()
-      .post()
-      .then((res) => {
-        console.log(res);
-        navigation.navigate('Match', {
-          matchedUser: res.json.matched_user,
-          chatroomId: res.json.chatroom.id
-        });
-      })
-      .catch(console.log);
+    let res;
+    try {
+      res = await new APIHandler('/matching')
+        .withAuth()
+        .post()
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+
+    console.log(res);
+    navigation.navigate('Match', {
+      matchedUser: res.json.matched_user,
+      chatroomId: res.json.chatroom.id
+    });
   }
 
   const goToChatIndex = () => {

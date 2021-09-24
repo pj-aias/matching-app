@@ -10,20 +10,24 @@ const ChatIndex = ({ navigation }) => {
   // const me = APIHandler.whoami();
 
   // Get messages from API after render (effect), and store them to variable if succeeded
-  useEffect(() => {
+  useEffect(async () => {
     navigation.setOptions({
       headerTitleAlign: 'center',
       headerTitle: 'チャットルーム',
     });
-    new APIHandler('/message/rooms')
-      .withAuth()
-      .get()
-      .then(res => {
-        console.log('get chat index');
-        console.log(res);
-        setRooms(res.json.chatrooms);
-      })
-      .catch(console.log);
+
+    let res;
+    try {
+      res = await new APIHandler('/message/rooms')
+        .withAuth()
+        .get()
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+
+    console.log("chat index res:", res);
+    setRooms(res.json.chatrooms);
   }, []);
 
   // Returns callback function to open a given chat
