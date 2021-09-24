@@ -59,8 +59,10 @@ const Chat = ({route, navigation}) => {
     return () => clearInterval(timer);
   }, [roomId]);
 
+  const me = APIHandler.whoami();
+
   const messagesView = messages.map(m => (
-    <ChatCard content={m.content} isCurrentUser={false} />
+    <ChatCard content={m.content} isCurrentUser={ m.user.id === me.id } />
   ));
   const usernames = getUserNames(room);
 
