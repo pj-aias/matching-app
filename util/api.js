@@ -5,6 +5,7 @@ import { AiasStorage } from "../aias/Aias";
 
 const { DistributedBbsModule } = NativeModules;
 
+const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
 
 export class APIHandler {
     static tor = Tor();
@@ -32,15 +33,20 @@ export class APIHandler {
     }
 
     constructor(endpoint) {
-        APIHandler.tor.startIfNotStarted();
         this.authToken = '';
         this.url = APIHandler.buildApiUrl(endpoint);
         this.endpoint = endpoint
         this.headers = {};
+        this.wait = false;
     }
 
     withAuth() {
         this.headers['Authorization'] = `Bearer ${APIHandler.authToken}`;
+        return this;
+    }
+
+    setWait() {
+        this.wait = true;
         return this;
     }
 
@@ -72,6 +78,27 @@ export class APIHandler {
 
         await this.withAIASSig(body);
         const headers = this.makeHeaders(data.headers);
+
+        if (APIHandler.wait) {
+            let data = "";
+            while (APIHandler.tor.getDaemonStatus() === 'NOTINIT') {
+                sleep(3);
+
+                try {
+                    await APIHandler.tor.stopIfRunning();
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
+        } else {
+            try {
+                await APIHandler.tor.stopIfRunning();
+            } catch (e) {
+                throw e;
+            }
+        }
+
 
         try {
             const res = await method(this.url, body, headers);

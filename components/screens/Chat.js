@@ -36,7 +36,8 @@ const Chat = ({ route, navigation }) => {
     console.log(res);
     setRoom(res.json.chatroom);
     setMessages(res.json.messages);
-    const timer = setTimeout(sendMessage, syncInterval);
+
+    const timer = setTimeout(syncMessages, syncInterval);
 
     const other = res.json.chatroom.users.filter((u) => u.id !== me.id)[0];
     setTitle(`${other.username} さんとのチャット`);
@@ -49,6 +50,7 @@ const Chat = ({ route, navigation }) => {
     let res;
     try {
       res = await new APIHandler(`/message/${roomId}`)
+        .setWait()
         .withAuth()
         .post({
           body: { content },
