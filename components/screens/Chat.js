@@ -77,9 +77,6 @@ const Chat = ({ route, navigation }) => {
       headerTitleAlign: 'center',
       headerTitle: { usernames } + 'さんとのチャット',
     });
-
-    const timer = setInterval(syncMessages, syncInterval);
-    return () => clearInterval(timer);
   }, [roomId]);
 
   useEffect(() => {
@@ -90,8 +87,8 @@ const Chat = ({ route, navigation }) => {
 
     return () => {
       setRoom({});
-      setText({});
-      setTitle({});
+      setText("");
+      setTitle("");
     }
   }, [roomId, title]);
 
