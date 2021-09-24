@@ -5,15 +5,57 @@ import { AiasStorage } from "../aias/Aias";
 
 const { DistributedBbsModule } = NativeModules;
 
+class TorWorker {
+    constructor() {
+        this.lock = false;
+        this.tor = Tor()
+    }
+}
+
+class LingQueue {
+    constructor(maxLen = 50) {
+        this.maxLen = maxLen;
+        this.buff = Array(this.maxLen);
+        this.head = 0;
+        this.count = 0;
+    }
+
+    enq(elem) {
+        if (this.count > this.maxLen) {
+            return false;
+        }
+
+        this.count += 1;
+        const i = this.head + this.count;
+        this.buff[i] = elem;
+
+        return true;
+    }
+
+    deq() {
+        if (this.count < 1) {
+            return;
+        }
+
+        const elem = this.buff[this.head]
+        this.buff[this.head] = null;
+        this.count -= 1;
+
+        return elem;
+    }
+}
 
 export class APIHandler {
-    static tor = Tor();
+    static pool = [new TorWorker(), new TorWorker(), new TorWorker()];
+    static que = [];
     static authToken = '';
     static me = null;
 
     static scheme = 'http';
     static host = 'yjqictkblqijcsldpwvkd2addy2kc7edpffeg64lhynruy3kxl7s5zid.onion';
     static port = 80;
+
+    static lock = false;
 
     static buildApiUrl(path, host = APIHandler.host) {
         return `${APIHandler.scheme}://${host}:${APIHandler.port}${path}`;
@@ -29,6 +71,10 @@ export class APIHandler {
 
     static whoami() {
         return this.me;
+    }
+
+    processNext() {
+        //
     }
 
     constructor(endpoint) {
@@ -65,6 +111,12 @@ export class APIHandler {
                 ...headers
             }
             : this.headers;
+    }
+
+    async waitUntilFree() {
+        while (APIHandler.lock) {
+
+        }
     }
 
     async request(data = {}, method) {
