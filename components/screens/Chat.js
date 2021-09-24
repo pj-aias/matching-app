@@ -7,7 +7,7 @@ import ChatCard from '../UIParts/ChatCard';
 export const getUserNames = chatroom =>
   chatroom.users ? chatroom.users.map(u => u.username).join(', ') : '';
 
-// sync messages every 10 seconds
+// sync messages every 60 seconds
 const syncInterval = 60 * 1000;
 
 const Chat = ({ route, navigation }) => {
@@ -18,7 +18,6 @@ const Chat = ({ route, navigation }) => {
   const [title, setTitle] = useState('Loading...');
 
   const { roomId } = route.params;
-
   const me = APIHandler.whoami();
 
   const syncMessages = () => {
@@ -30,6 +29,7 @@ const Chat = ({ route, navigation }) => {
         console.log(res);
         setRoom(res.json.chatroom);
         setMessages(res.json.messages);
+        setTimeout(sendMessage, syncInterval);
 
         const other = res.json.chatroom.users.filter((u) => u.id !== me.id)[0];
         setTitle(`${other.username} さんとのチャット`);
