@@ -36,10 +36,13 @@ const Chat = ({ route, navigation }) => {
     console.log(res);
     setRoom(res.json.chatroom);
     setMessages(res.json.messages);
-    setTimeout(syncMessages, syncInterval);
+
+    const timer = setTimeout(syncMessages, syncInterval);
 
     const other = res.json.chatroom.users.filter((u) => u.id !== me.id)[0];
     setTitle(`${other.username} さんとのチャット`);
+
+    return () => clearTimeout(timer);
   }
 
   const sendMessage = async content => {
