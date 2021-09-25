@@ -10,6 +10,8 @@ const Top = ({ navigation, route }) => {
   const [signature, setSignature] = useState("");
   const [verifyResult, setVerifyResult] = useState(null);
 
+  Alert.alert(`V8 version is ${global._v8runtime().version}`);
+
   const msg = "hoge";
 
   useEffect(async () => {
