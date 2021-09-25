@@ -17,22 +17,19 @@ const Chat = ({ route, navigation }) => {
   const [room, setRoom] = useState({});
   const [text, setText] = useState('');
   const [title, setTitle] = useState('Loading...');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { roomId } = route.params;
   const me = APIHandler.whoami();
-  let isLoading = false
 
   const syncMessages = async () => {
     let res;
-    isLoading = true
     try {
       res = await new APIHandler('/message/' + roomId)
         .withAuth()
         .get();
-        isLoading = false
     } catch (e) {
       console.log(e);
-      isLoading = false
       return;
     }
 
@@ -55,7 +52,7 @@ const Chat = ({ route, navigation }) => {
   const sendMessage = async content => {
     console.log(`send message "${content}"`);
     let res;
-    isLoading = true
+    setIsLoading(true)
     try {
       res = await new APIHandler(`/message/${roomId}`)
         .setWait()
@@ -63,10 +60,11 @@ const Chat = ({ route, navigation }) => {
         .post({
           body: { content },
         });
-        isLoading = false
+      setIsLoading(false)
+
     } catch (e) {
       console.log(e);
-      isLoading = false
+      setIsLoading(false)
       return;
     }
 

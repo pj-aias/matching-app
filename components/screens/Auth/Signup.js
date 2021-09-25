@@ -9,10 +9,11 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 const Signup = ({ navigation }) => {
   const [error, setError] = useState('');
-  let isLoading = false
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (name, password) => {
     console.log(name, password);
-    isLoading = true
+    setIsLoading(true);
     try {
       const res = await new APIHandler('/user')
         .post({
@@ -30,10 +31,11 @@ const Signup = ({ navigation }) => {
         index: 0,
         routes: [{ name: 'Start' }],
       });
-      isLoading = false
+      setIsLoading(false);
+
     } catch (err) {
       console.log(err.message);
-      isLoading = false
+      setIsLoading(false);
       setError(err.message);
     }
   };

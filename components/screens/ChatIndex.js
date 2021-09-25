@@ -6,7 +6,7 @@ import { getUserNames } from './Chat.js';
 import Spinner from 'react-native-loading-spinner-overlay';
 const ChatIndex = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
-  let isLoading = false
+  const [isLoading, setIsLoading] = useState(false);
   // const me = APIHandler.whoami();
 
   // Get messages from API after render (effect), and store them to variable if succeeded
@@ -17,15 +17,15 @@ const ChatIndex = ({ navigation }) => {
     });
 
     let res;
-    isLoading = true
+    setIsLoading(true);
     try {
       res = await new APIHandler('/message/rooms')
         .withAuth()
         .get()
-        isLoading = false
+      setIsLoading(false)
     } catch (e) {
       console.log(e);
-      isLoading = false
+      setIsLoading(false)
       return;
     }
 
@@ -50,7 +50,10 @@ const ChatIndex = ({ navigation }) => {
     <Room key={r.id} room={r} openRoom={goToChat(r.id)} />
   ));
 
-  return <ScrollView>{roomsView}</ScrollView>;
+  return <View>
+    <ScrollView>{roomsView}</ScrollView>
+    <Spinner visible={isLoading} />
+  </View>;
 };
 
 const Room = ({ room, openRoom }) => {
@@ -89,7 +92,6 @@ const Room = ({ room, openRoom }) => {
         }}>
         {otherUser.username}
       </Text>
-      <Spinner visible={isLoading} />
     </TouchableOpacity>
   );
 };
