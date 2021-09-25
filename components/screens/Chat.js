@@ -7,8 +7,8 @@ import ChatCard from '../UIParts/ChatCard';
 export const getUserNames = chatroom =>
   chatroom.users ? chatroom.users.map(u => u.username).join(', ') : '';
 
-// sync messages every 60 seconds
-const syncInterval = 60 * 1000;
+// sync messages every 10 seconds
+const syncInterval = 10 * 1000;
 
 const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);

@@ -5717,6 +5717,13 @@ react-native-size-matters@^0.3.1:
     "@types/async" "^3.2.6"
     async "^3.2.0"
 
+"react-native-v8@>=0.65.1-patch.0 <0.65.2":
+  version "0.65.1-patch.0"
+  resolved "https://registry.yarnpkg.com/react-native-v8/-/react-native-v8-0.65.1-patch.0.tgz#4fe32796ed7afbcc8b946daef31f97a67c5f43bb"
+  integrity sha512-JJFZQ5NNmU1TzE/uYy0TTT8GyonOp8CrmPi6MMowFbI0lNpgxElJaCuAaqTbF8QWRyazaA3EFVtcIU7zcxX6fw==
+  dependencies:
+    v8-android-jit "~9.93.0"
+
 react-native-vector-icons@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-8.1.0.tgz#e8ee2b17bc4d9f636da1c6f67feee8e2a850c3d8"
@@ -6890,6 +6897,11 @@ uuid@^8.3.0:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
+
+v8-android-jit@~9.93.0:
+  version "9.93.0"
+  resolved "https://registry.yarnpkg.com/v8-android-jit/-/v8-android-jit-9.93.0.tgz#2e52d3878da97647959991cefc5b90e47449f51a"
+  integrity sha512-qSEnxj/7x2lqvAjRtdox0fx20J5ekcLg/O1/M4vNKUtbWG75+/ACspP3n0KD0RIYLhD8F2iGxERRbwu9FbjKRg==
 
 v8-compile-cache@^2.0.3:
   version "2.3.0"
