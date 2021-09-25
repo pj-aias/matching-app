@@ -5,13 +5,15 @@ import authSchema from '../../../util/yup.js';
 import { APIHandler } from '../../../util/api';
 import { Button } from 'react-native-elements';
 import axios from 'axios';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Signup = ({ navigation }) => {
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (name, password) => {
     console.log(name, password);
-
+    setIsLoading(true);
     try {
       const res = await new APIHandler('/user')
         .post({
@@ -29,8 +31,11 @@ const Signup = ({ navigation }) => {
         index: 0,
         routes: [{ name: 'Start' }],
       });
+      setIsLoading(false);
+
     } catch (err) {
       console.log(err.message);
+      setIsLoading(false);
       setError(err.message);
     }
   };
@@ -84,6 +89,7 @@ const Signup = ({ navigation }) => {
         )}
       </Formik>
       <Text>{error ? `エラー: ${error}` : ''}</Text>
+      <Spinner visible={isLoading} />
     </View>
   );
 };

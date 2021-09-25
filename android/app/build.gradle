@@ -179,6 +179,9 @@ android {
 
         }
     }
+    packagingOptions {
+        exclude "**/libjsc.so"
+    }
 }
 
 dependencies {
@@ -214,6 +217,8 @@ dependencies {
         implementation jscFlavor
     }
     implementation files("../../node_modules/react-native-tor/android/libs/sifir_android.aar")
+
+    implementation 'org.chromium:v8-android:9.93.+'
 }
 
 // Run this once to be able to run the application with BUCK

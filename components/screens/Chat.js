@@ -3,12 +3,13 @@ import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { APIHandler } from '../../util/api';
 import ChatCard from '../UIParts/ChatCard';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export const getUserNames = chatroom =>
   chatroom.users ? chatroom.users.map(u => u.username).join(', ') : '';
 
-// sync messages every 60 seconds
-const syncInterval = 60 * 1000;
+// sync messages every 10 seconds
+const syncInterval = 10 * 1000;
 
 const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
@@ -16,13 +17,13 @@ const Chat = ({ route, navigation }) => {
   const [room, setRoom] = useState({});
   const [text, setText] = useState('');
   const [title, setTitle] = useState('Loading...');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { roomId } = route.params;
   const me = APIHandler.whoami();
 
   const syncMessages = async () => {
     let res;
-
     try {
       res = await new APIHandler('/message/' + roomId)
         .withAuth()
@@ -51,6 +52,7 @@ const Chat = ({ route, navigation }) => {
   const sendMessage = async content => {
     console.log(`send message "${content}"`);
     let res;
+    setIsLoading(true)
     try {
       res = await new APIHandler(`/message/${roomId}`)
         .setWait()
@@ -58,8 +60,11 @@ const Chat = ({ route, navigation }) => {
         .post({
           body: { content },
         });
+      setIsLoading(false)
+
     } catch (e) {
       console.log(e);
+      setIsLoading(false)
       return;
     }
 
@@ -106,6 +111,7 @@ const Chat = ({ route, navigation }) => {
         value={text}
         placeholder={'メッセージを入力してください'}
       />
+      <Spinner visible={isLoading} />
     </View>
   );
 };

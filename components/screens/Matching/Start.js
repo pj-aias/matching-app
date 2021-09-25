@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { APIHandler } from '../../../util/api.js'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Start = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
     let res;
+    setIsLoading(true);
     try {
       res = await new APIHandler('/matching')
         .withAuth()
         .post()
+      setIsLoading(false);
     } catch (e) {
       console.log(e);
+      setIsLoading(false);
       return;
     }
 
@@ -71,6 +76,7 @@ const Start = ({ navigation }) => {
           }}
         />
       </View>
+      <Spinner visible={isLoading} />
     </View>
   );
 }

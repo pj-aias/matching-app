@@ -85,33 +85,33 @@ export class APIHandler {
         await this.withAIASSig(body);
         const headers = this.makeHeaders(data.headers);
 
-        if (APIHandler.wait) {
-            let data = "";
-            while (APIHandler.tor.getDaemonStatus() === 'NOTINIT' && !stopAll) {
-                sleep(3);
+        // if (APIHandler.wait) {
+        //     let data = "";
+        //     while (APIHandler.tor.getDaemonStatus() === 'NOTINIT' && !stopAll) {
+        //         sleep(3);
 
-                try {
-                    await APIHandler.tor.stopIfRunning();
-                }
-                catch (e) {
-                    console.log(e);
-                }
-            }
-        } else {
-            try {
-                await APIHandler.tor.stopIfRunning();
-            } catch (e) {
-                throw e;
-            }
-        }
+        //         try {
+        //             await APIHandler.tor.stopIfRunning();
+        //         }
+        //         catch (e) {
+        //             console.log(e);
+        //         }
+        //     }
+        // } else {
+        //     try {
+        //         await APIHandler.tor.stopIfRunning();
+        //     } catch (e) {
+        //         throw e;
+        //     }
+        // }
 
 
         try {
             const res = await method(this.url, body, headers);
-            await APIHandler.tor.stopIfRunning();
+            // await APIHandler.tor.stopIfRunning();
             return res;
         } catch (e) {
-            await APIHandler.tor.stopIfRunning();
+            // await APIHandler.tor.stopIfRunning();
             throw e;
         }
     }
