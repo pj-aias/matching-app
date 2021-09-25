@@ -4,13 +4,14 @@ import { Formik } from 'formik';
 import authSchema from '../../../util/yup.js';
 import { APIHandler } from '../../../util/api.js';
 import { Button } from 'react-native-elements';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Signin = ({ navigation }) => {
   const [error, setError] = useState('');
-
+  let isLoading = false
   const handleSubmit = async (name, password) => {
     console.log(name, password);
-
+    isLoading = true
     try {
       const res = await new APIHandler('/login')
         .post({
@@ -29,10 +30,11 @@ const Signin = ({ navigation }) => {
         index: 0,
         routes: [{ name: 'Start' }],
       });
-
+      isLoading = false
     } catch (err) {
       console.log(err.message);
       setError(err.message);
+      isLoading = false
     }
   }
 
@@ -82,6 +84,7 @@ const Signin = ({ navigation }) => {
         )}
       </Formik>
       <Text>{error ? `エラー: ${error}` : ''}</Text>
+      <Spinner visible={isLoading} />
     </View>
   );
 };

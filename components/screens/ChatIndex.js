@@ -3,10 +3,10 @@ import { Text, View, Button, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { APIHandler } from '../../util/api';
 import { getUserNames } from './Chat.js';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 const ChatIndex = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
-
+  let isLoading = false
   // const me = APIHandler.whoami();
 
   // Get messages from API after render (effect), and store them to variable if succeeded
@@ -17,12 +17,15 @@ const ChatIndex = ({ navigation }) => {
     });
 
     let res;
+    isLoading = true
     try {
       res = await new APIHandler('/message/rooms')
         .withAuth()
         .get()
+        isLoading = false
     } catch (e) {
       console.log(e);
+      isLoading = false
       return;
     }
 
@@ -86,6 +89,7 @@ const Room = ({ room, openRoom }) => {
         }}>
         {otherUser.username}
       </Text>
+      <Spinner visible={isLoading} />
     </TouchableOpacity>
   );
 };
